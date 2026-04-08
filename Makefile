@@ -4,17 +4,19 @@ PRINTF		= libftprintf.a
 
 LIBDIR		= printf
 
-SRCS		= ft_ls.c \
+SRCS		= ft_ls.c
 
-OBJS		= ${addprefix ${ODIR}, $(SRCS:.c=.o)}
+OBJS		= $(addprefix $(ODIR), $(SRCS:.c=.o))
 
 SDIR		= src/
 
 ODIR		= obj/
 
-DEPS		= ${addprefix ${ODIR}, $(SRCS:.c=.d)}
+IDIR		= includes/
 
-CFLAGS		= -Wall -Wextra -Werror -MMD
+DEPS		= $(addprefix $(ODIR), $(SRCS:.c=.d))
+
+CFLAGS		= -Wall -Wextra -Werror -MMD -Iincludes/ -Iprintf/
 
 AR			= ar rcs
 
@@ -24,24 +26,24 @@ all:		dir ${NAME}
 
 dir:
 				$(MAKE) -C $(LIBDIR)
-				mkdir -p ${ODIR}
+				mkdir -p $(ODIR)
 
 obj/%.o:	src/%.c Makefile
-				${CC} ${CFLAGS} -c $< -o $@
+				$(CC) $(CFLAGS) -c $< -o $@
 
-${NAME}:	${OBJS}
+${NAME}:	$(OBJS)
 				$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBDIR)/$(PRINTF)
 
 bonus:		all
 
 clean:
 				make -C $(LIBDIR) clean
-				${RM} ${ODIR}
+				$(RM) $(ODIR)
 
 fclean:		
 				make -C $(LIBDIR) fclean
-				${RM} ${ODIR}
-				${RM} ${NAME}
+				$(RM) $(ODIR)
+				$(RM) $(NAME)
 
 re:			fclean all
 
