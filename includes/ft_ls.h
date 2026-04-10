@@ -6,7 +6,7 @@
 /*   By: molasz-a <molasz-a@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 16:14:04 by molasz-a          #+#    #+#             */
-/*   Updated: 2026/04/08 16:28:27 by molasz-a         ###   ########.fr       */
+/*   Updated: 2026/04/10 13:05:47 by molasz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,14 @@
 
 typedef struct s_ls
 {
-	int	path_count;
+	char	**paths;
+	int		path_count;
 
-	int	l_flag;
-	int	R_flag;
-	int	a_flag;
-	int	r_flag;
-	int	t_flag;
+	int		l_flag;
+	int		R_flag;
+	int		a_flag;
+	int		r_flag;
+	int		t_flag;
 }	t_ls;
 
 #endif
