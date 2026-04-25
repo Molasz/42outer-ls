@@ -6,7 +6,7 @@
 /*   By: molasz-a <molasz-a@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 16:14:04 by molasz-a          #+#    #+#             */
-/*   Updated: 2026/04/10 13:05:47 by molasz           ###   ########.fr       */
+/*   Updated: 2026/04/11 12:41:05 by molasz-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,15 @@
 
 # include "../printf/ft_printf.h"
 
+typedef struct s_path
+{
+	char			*path;
+	struct s_path	*R_paths;
+} t_path;
+
 typedef struct s_ls
 {
-	char	**paths;
+	t_path	*paths;
 	int		path_count;
 
 	int		l_flag;
@@ -26,5 +32,7 @@ typedef struct s_ls
 	int		r_flag;
 	int		t_flag;
 }	t_ls;
+
+int	parse_args(char **argv, t_ls *data);
 
 #endif

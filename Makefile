@@ -4,7 +4,8 @@ PRINTF		= libftprintf.a
 
 LIBDIR		= printf
 
-SRCS		= ft_ls.c
+SRCS		= ft_ls.c \
+				parse_args.c
 
 OBJS		= $(addprefix $(ODIR), $(SRCS:.c=.o))
 
