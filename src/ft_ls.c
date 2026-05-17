@@ -6,7 +6,7 @@
 /*   By: molasz-a <molasz-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/11 11:58:35 by molasz-a          #+#    #+#             */
-/*   Updated: 2026/05/03 23:52:01 by molasz-a         ###   ########.fr       */
+/*   Updated: 2026/05/17 19:26:52 by molasz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 static void	init_data(t_ls *data)
 {
 	data->paths = NULL;
-	data->path_count = 0;
 	data->l_flag = 0;
 	data->R_flag = 0;
 	data->a_flag = 0;
@@ -25,16 +24,18 @@ static void	init_data(t_ls *data)
 
 static void	free_data(t_ls *data)
 {
-	int	i;
+	t_list	*path;
+	t_list	*tmp;
 
-	i = 0;
 	if (data->paths)
 	{
-		while (data->paths + i)
+		path = data->paths;
+		while (path)
 		{
-			i++;
+			tmp = path->next;
+			free(path);
+			path = tmp;
 		}
-		free(data->paths);
 	}
 }
 

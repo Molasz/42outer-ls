@@ -6,7 +6,7 @@
 /*   By: molasz-a <molasz-a@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 16:14:04 by molasz-a          #+#    #+#             */
-/*   Updated: 2026/04/11 12:41:05 by molasz-a         ###   ########.fr       */
+/*   Updated: 2026/05/17 19:51:54 by molasz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,18 @@
 # define FT_LS_H
 
 # include "../printf/ft_printf.h"
+# include <sys/stat.h>
 
 typedef struct s_path
 {
 	char			*path;
-	struct s_path	*R_paths;
+	struct stat		stat;
+	struct s_path	*next;
 } t_path;
 
 typedef struct s_ls
 {
-	t_path	*paths;
-	int		path_count;
+	t_list	*paths;
 
 	int		l_flag;
 	int		R_flag;
@@ -33,6 +34,10 @@ typedef struct s_ls
 	int		t_flag;
 }	t_ls;
 
-int	parse_args(char **argv, t_ls *data);
+int		parse_args(char **argv, t_ls *data);
+
+t_path	*ft_lstnew(char *str);
+void	ft_lstadd_alpha(t_list **lst, char *str);
+
 
 #endif

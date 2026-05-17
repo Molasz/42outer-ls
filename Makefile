@@ -2,7 +2,7 @@ NAME		= ft_ls
 
 PRINTF		= libftprintf.a
 
-LIBDIR		= printf
+PRINTFDIR	= printf
 
 SRCS		= ft_ls.c \
 				parse_args.c
@@ -26,23 +26,23 @@ RM			= rm -rf
 all:		dir ${NAME}
 
 dir:
-				$(MAKE) -C $(LIBDIR)
+				$(MAKE) -C $(PRINTFDIR)
 				mkdir -p $(ODIR)
 
 obj/%.o:	src/%.c Makefile
 				$(CC) $(CFLAGS) -c $< -o $@
 
 ${NAME}:	$(OBJS)
-				$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBDIR)/$(PRINTF)
+				$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(PRINTFDIR)/$(PRINTF)
 
 bonus:		all
 
 clean:
-				make -C $(LIBDIR) clean
+				make -C $(PRINTFDIR) clean
 				$(RM) $(ODIR)
 
 fclean:		
-				make -C $(LIBDIR) fclean
+				make -C $(PRINTFDIR) fclean
 				$(RM) $(ODIR)
 				$(RM) $(NAME)
 
