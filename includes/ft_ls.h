@@ -25,7 +25,7 @@ typedef struct s_path
 
 typedef struct s_ls
 {
-	t_list	*paths;
+	t_path	*paths;
 
 	int		l_flag;
 	int		R_flag;
@@ -36,8 +36,8 @@ typedef struct s_ls
 
 int		parse_args(char **argv, t_ls *data);
 
-t_path	*ft_lstnew(char *str);
-void	ft_lstadd_alpha(t_list **lst, char *str);
+t_path	*ft_pathnew(char *str);
+int		ft_lstadd_alpha(t_path **lst, char *str);
 
 
 #endif

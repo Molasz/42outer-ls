@@ -50,7 +50,7 @@ static int	read_args(char **argv, t_ls *data)
 		}
 		else
 		{
-			if (ft_lstadd_alpha(&data->path, argv[i]))
+			if (ft_lstadd_alpha(&data->paths, argv[i]))
 				return (1);	
 		}
 		i++;
@@ -63,6 +63,6 @@ int	parse_args(char **argv, t_ls *data)
 	if (read_args(argv, data))
 		return (1);
 	if (!data->paths)
-		data->paths = ft_lstnew(".");
+		data->paths = ft_pathnew(".");
 	return (0);
 }

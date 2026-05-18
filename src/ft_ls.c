@@ -24,8 +24,8 @@ static void	init_data(t_ls *data)
 
 static void	free_data(t_ls *data)
 {
-	t_list	*path;
-	t_list	*tmp;
+	t_path	*path;
+	t_path	*tmp;
 
 	if (data->paths)
 	{
