@@ -6,7 +6,7 @@
 /*   By: molasz <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/18 11:05:00 by molasz            #+#    #+#             */
-/*   Updated: 2026/05/18 11:07:41 by molasz           ###   ########.fr       */
+/*   Updated: 2026/05/19 21:08:39 by molasz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,13 +42,11 @@ int	ft_lstadd_alpha(t_path **lst, char *str)
 
     path = ft_pathnew(str);
     if (!path)
-	{
-        return (1);
-	}
+		return (1);
 	if (!*lst || ft_strcmp((*lst)->path, str) > 0)
 	{
 		path->next = *lst;
-        *lst = path;
+		*lst = path;
     }
     else
     {

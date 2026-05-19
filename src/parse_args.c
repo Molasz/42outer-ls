@@ -6,7 +6,7 @@
 /*   By: molasz-a <molasz-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/11 11:58:22 by molasz-a          #+#    #+#             */
-/*   Updated: 2026/05/17 20:02:13 by molasz           ###   ########.fr       */
+/*   Updated: 2026/05/19 21:13:28 by molasz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,10 @@ int	parse_args(char **argv, t_ls *data)
 	if (read_args(argv, data))
 		return (1);
 	if (!data->paths)
+	{
 		data->paths = ft_pathnew(".");
+		if (!data->paths)
+			return (1);
+	}
 	return (0);
 }
