@@ -6,13 +6,13 @@
 /*   By: molasz-a <molasz-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/11 11:58:22 by molasz-a          #+#    #+#             */
-/*   Updated: 2026/05/19 21:13:28 by molasz           ###   ########.fr       */
+/*   Updated: 2026/05/20 13:38:30 by molasz-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-static int	read_flag(char *str, t_ls *data)
+static int	read_flag(char *str, t_data *data)
 {
 	int	i;
 
@@ -30,17 +30,22 @@ static int	read_flag(char *str, t_ls *data)
 		else if (str[i] == 't')
 			data->t_flag = 1;
 		else
+		{
+			ft_printf("ft_ls: invalid option -- '%c'\n", str[i]);
 			return (1);
+		}
 		i++;
 	}
 	return (0);
 }
 
-static int	read_args(char **argv, t_ls *data)
+static int	read_args(char **argv, t_data *data)
 {
-	int		i;
+	int	i;
+	int	paths;
 
 	i = 0;
+	paths = 0;
 	while (argv[i])
 	{
 		if (argv[i][0] == '-')
@@ -50,23 +55,24 @@ static int	read_args(char **argv, t_ls *data)
 		}
 		else
 		{
+			paths++;
 			if (ft_lstadd_alpha(&data->paths, argv[i]))
-				return (1);	
+				return (1);
 		}
 		i++;
 	}
-	return (0);
-}
-
-int	parse_args(char **argv, t_ls *data)
-{
-	if (read_args(argv, data))
-		return (1);
-	if (!data->paths)
+	if (!paths)
 	{
 		data->paths = ft_pathnew(".");
 		if (!data->paths)
 			return (1);
 	}
+	return (0);
+}
+
+int	parse_args(char **argv, t_data *data)
+{
+	if (read_args(argv, data))
+		return (1);
 	return (0);
 }

@@ -6,13 +6,13 @@
 /*   By: molasz-a <molasz-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/11 11:58:35 by molasz-a          #+#    #+#             */
-/*   Updated: 2026/05/19 21:20:48 by molasz           ###   ########.fr       */
+/*   Updated: 2026/05/20 13:39:51 by molasz-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-static void	init_data(t_ls *data)
+static void	init_data(t_data *data)
 {
 	data->paths = NULL;
 	data->l_flag = 0;
@@ -22,7 +22,7 @@ static void	init_data(t_ls *data)
 	data->t_flag = 0;
 }
 
-static void	free_data(t_ls *data)
+static void	free_data(t_data *data)
 {
 	t_path	*path;
 	t_path	*tmp;
@@ -39,10 +39,11 @@ static void	free_data(t_ls *data)
 	}
 }
 
-static void    debug_paths(t_path *path)
+static void	debug_paths(t_path *path)
 {
     struct stat *s;
 
+	ft_printf(" --- PATHS ---\n\n");
     while (path)
     {
 		s = &path->stat;
@@ -62,14 +63,25 @@ static void    debug_paths(t_path *path)
     }
 }
 
+static void	debug_flags(t_data *data)
+{
+	ft_printf(" --- FLAGS ---\n\n");
+	ft_printf("-l: %d\n", data->l_flag);
+	ft_printf("-R: %d\n", data->R_flag);
+	ft_printf("-a: %d\n", data->a_flag);
+	ft_printf("-r: %d\n", data->r_flag);
+	ft_printf("-t: %d\n", data->t_flag);
+}
+
 int	main(int argc, char **argv)
 {
-	t_ls	data;
+	t_data	data;
 
+	(void) argc;
 	init_data(&data);
-	if (argc > 1)
-		parse_args(argv + 1, &data);
+	parse_args(argv + 1, &data);
 	debug_paths(data.paths);
+	debug_flags(&data);
 	free_data(&data);
 	return (0);
 }
