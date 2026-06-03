@@ -6,7 +6,7 @@
 /*   By: molasz-a <molasz-a@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 16:14:04 by molasz-a          #+#    #+#             */
-/*   Updated: 2026/06/03 15:34:32 by molasz-a         ###   ########.fr       */
+/*   Updated: 2026/06/03 17:17:11 by molasz-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,16 +19,24 @@
 # include <string.h>
 # include <dirent.h>
 
-typedef struct s_path
+typedef struct s_entry
 {
-	char			*path;
+	char			*name;
 	struct stat		stat;
-	struct s_path	*next;
-} t_path;
+	struct s_entry	*next;
+} t_entry;
+
+typedef struct s_dir
+{
+    char			*path;
+    t_entry			*entries;
+    struct s_dir	*next;
+} t_dir;
 
 typedef struct s_data
 {
-	t_path	*paths;
+	t_dir	*dirs;
+	t_dir	*dirs_tail;
 
 	int		l_flag;
 	int		R_flag;
@@ -38,7 +46,7 @@ typedef struct s_data
 }	t_data;
 
 int	parse_args(char **argv, t_data *data);
-int	ft_lstadd_alpha(t_data *data, char *str, int isParam);
+int	ft_diradd(t_data *data, char *path);
 
 int		ft_strcmp(char *s1, char *s2);
 char	*ft_concat_path(char *s1, char *s2);

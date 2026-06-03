@@ -6,7 +6,7 @@
 /*   By: molasz-a <molasz-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/11 11:58:35 by molasz-a          #+#    #+#             */
-/*   Updated: 2026/06/03 15:36:54 by molasz-a         ###   ########.fr       */
+/*   Updated: 2026/06/03 17:28:36 by molasz-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 static void	init_data(t_data *data)
 {
-	data->paths = NULL;
+	data->dirs = NULL;
+	data->dirs_tail = NULL;
 	data->l_flag = 0;
 	data->R_flag = 0;
 	data->a_flag = 0;
@@ -22,41 +23,54 @@ static void	init_data(t_data *data)
 	data->t_flag = 0;
 }
 
-static void	free_data(t_data *data)
+static void	free_entries(t_entry *entry)
 {
-	t_path	*path;
-	t_path	*tmp;
+	t_entry	*tmp;
 
-	if (data->paths)
+	while (entry)
 	{
-		path = data->paths;
-		while (path)
+		tmp = entry->next;
+		free(entry->name);
+		free(entry);
+		entry = tmp;
+	}
+}
+
+static void	free_dirs(t_dir *dirs)
+{
+	t_dir	*dir;
+	t_dir	*tmp;
+
+	dir = dirs;
+	while (dir)
+	{
+		tmp = dir->next;
+		//free(dir->path);
+		free_entries(dir->entries);
+		free(dir);
+		dir = tmp;
+	}
+}
+
+static void	debug_dirs(t_dir *dirs)
+{
+	t_dir	*dir;
+	t_entry	*entry;
+
+	dir = dirs;
+	while (dir)
+	{
+		if (dir->path)
+			ft_printf("%s:\n", dir->path);
+		entry = dir->entries;
+		while (entry)
 		{
-			tmp = path->next;
-			free(path);
-			path = tmp;
+			ft_printf("%s ", entry->name);
+			entry = entry->next;
 		}
+		ft_printf("\n");
+		dir = dir->next;
 	}
-}
-
-static void	debug_paths(t_path *path)
-{
-	ft_printf(" --- PATHS ---\n\n");
-	while (path)
-	{
-		ft_printf("%s\n", path->path);
-		path = path->next;
-	}
-}
-
-static void	debug_flags(t_data *data)
-{
-	ft_printf(" --- FLAGS ---\n\n");
-	ft_printf("-l: %d\n", data->l_flag);
-	ft_printf("-R: %d\n", data->R_flag);
-	ft_printf("-a: %d\n", data->a_flag);
-	ft_printf("-r: %d\n", data->r_flag);
-	ft_printf("-t: %d\n", data->t_flag);
 }
 
 int	main(int argc, char **argv)
@@ -65,9 +79,9 @@ int	main(int argc, char **argv)
 
 	(void) argc;
 	init_data(&data);
-	parse_args(argv + 1, &data);
-	debug_paths(data.paths);
-	debug_flags(&data);
-	free_data(&data);
+	if (parse_args(argv + 1, &data))
+		return (1);
+	debug_dirs(data.dirs);
+	free_dirs(data.dirs);
 	return (0);
 }
