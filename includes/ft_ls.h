@@ -6,7 +6,7 @@
 /*   By: molasz-a <molasz-a@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 16:14:04 by molasz-a          #+#    #+#             */
-/*   Updated: 2026/05/20 13:38:02 by molasz-a         ###   ########.fr       */
+/*   Updated: 2026/06/03 15:34:32 by molasz-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <sys/stat.h>
 # include <errno.h>
 # include <string.h>
+# include <dirent.h>
 
 typedef struct s_path
 {
@@ -36,10 +37,10 @@ typedef struct s_data
 	int		t_flag;
 }	t_data;
 
-int		parse_args(char **argv, t_data *data);
+int	parse_args(char **argv, t_data *data);
+int	ft_lstadd_alpha(t_data *data, char *str, int isParam);
 
-t_path	*ft_pathnew(char *str);
-int		ft_lstadd_alpha(t_path **lst, char *str);
-
+int		ft_strcmp(char *s1, char *s2);
+char	*ft_concat_path(char *s1, char *s2);
 
 #endif

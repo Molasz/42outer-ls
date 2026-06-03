@@ -6,7 +6,7 @@
 /*   By: molasz-a <molasz-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/11 11:58:35 by molasz-a          #+#    #+#             */
-/*   Updated: 2026/06/03 12:37:57 by molasz-a         ###   ########.fr       */
+/*   Updated: 2026/06/03 15:36:54 by molasz-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,24 +41,10 @@ static void	free_data(t_data *data)
 
 static void	debug_paths(t_path *path)
 {
-	struct stat	*s;
-
 	ft_printf(" --- PATHS ---\n\n");
 	while (path)
 	{
-		s = &path->stat;
-		ft_printf("=== %s ===\n", path->path);
-		ft_printf("st_mode:   %u\n", s->st_mode);
-		ft_printf("st_ino:    %lu\n", s->st_ino);
-		ft_printf("st_nlink:  %lu\n", s->st_nlink);
-		ft_printf("st_uid:    %u\n", s->st_uid);
-		ft_printf("st_gid:    %u\n", s->st_gid);
-		ft_printf("st_size:   %ld\n", s->st_size);
-		ft_printf("st_blocks: %ld\n", s->st_blocks);
-		ft_printf("st_mtime:  %ld\n", s->st_mtim.tv_sec);
-		ft_printf("is_dir:    %d\n", S_ISDIR(s->st_mode));
-		ft_printf("is_lnk:    %d\n", S_ISLNK(s->st_mode));
-		ft_printf("is_reg:    %d\n\n", S_ISREG(s->st_mode));
+		ft_printf("%s\n", path->path);
 		path = path->next;
 	}
 }

@@ -6,6 +6,7 @@ PRINTFDIR	= printf
 
 SRCS		= ft_ls.c \
 				parse_args.c \
+				ft_lstadd_alpha.c \
 				utils.c
 
 OBJS		= $(addprefix $(ODIR), $(SRCS:.c=.o))

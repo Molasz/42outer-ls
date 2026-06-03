@@ -6,13 +6,13 @@
 /*   By: molasz <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/18 11:05:00 by molasz            #+#    #+#             */
-/*   Updated: 2026/06/03 12:38:37 by molasz-a         ###   ########.fr       */
+/*   Updated: 2026/06/03 15:20:44 by molasz-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-static int	ft_strcmp(char *s1, char *s2)
+int	ft_strcmp(char *s1, char *s2)
 {
 	int	i;
 
@@ -22,43 +22,31 @@ static int	ft_strcmp(char *s1, char *s2)
 	return (s1[i] - s2[i]);
 }
 
-t_path	*ft_pathnew(char *str)
+char	*ft_concat_path(char *s1, char *s2)
 {
-	t_path	*path;
+	char	*str;
+	int		len1;
+	int		len2;
+	int		i;
 
-	path = malloc(sizeof (t_path));
-	if (!path)
+	len1 = ft_strlen(s1);
+	len2 = ft_strlen(s2);
+	str = malloc(len1 + len2 + 2);
+	if (!str)
 		return (NULL);
-	path->path = str;
-	path->next = NULL;
-	return (path);
+	i = 0;
+	while (i < len1)
+	{
+		str[i] = s1[i];
+		i++;
+	}
+	str[i++] = '/';
+	while (i < len1 + len2 + 1)
+	{
+		str[i] = s2[i - (len1 + 1)];
+		i++;
+	}
+	str[i] = '\0';
+	return (str);
 }
 
-int	ft_lstadd_alpha(t_path **lst, char *str)
-{
-	t_path	*path;
-	t_path	*tmp;
-
-	path = ft_pathnew(str);
-	if (!path)
-		return (1);
-	if (lstat(str, &path->stat) == -1)
-	{
-		ft_printf("ft_ls: cannot access '%s': %s\n", str, strerror(errno));
-		return (0);
-	}
-	if (!*lst || ft_strcmp((*lst)->path, str) > 0)
-	{
-		path->next = *lst;
-		*lst = path;
-	}
-	else
-	{
-		tmp = *lst;
-		while (tmp->next && ft_strcmp(tmp->next->path, str) < 0)
-			tmp = tmp->next;
-		path->next = tmp->next;
-		tmp->next = path;
-	}
-	return (0);
-}
