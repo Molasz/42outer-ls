@@ -6,7 +6,7 @@
 /*   By: molasz-a <molasz-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/11 11:58:35 by molasz-a          #+#    #+#             */
-/*   Updated: 2026/05/20 13:39:51 by molasz-a         ###   ########.fr       */
+/*   Updated: 2026/06/03 12:37:57 by molasz-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,11 @@ static void	free_data(t_data *data)
 
 static void	debug_paths(t_path *path)
 {
-    struct stat *s;
+	struct stat	*s;
 
 	ft_printf(" --- PATHS ---\n\n");
-    while (path)
-    {
+	while (path)
+	{
 		s = &path->stat;
 		ft_printf("=== %s ===\n", path->path);
 		ft_printf("st_mode:   %u\n", s->st_mode);
@@ -59,8 +59,8 @@ static void	debug_paths(t_path *path)
 		ft_printf("is_dir:    %d\n", S_ISDIR(s->st_mode));
 		ft_printf("is_lnk:    %d\n", S_ISLNK(s->st_mode));
 		ft_printf("is_reg:    %d\n\n", S_ISREG(s->st_mode));
-        path = path->next;
-    }
+		path = path->next;
+	}
 }
 
 static void	debug_flags(t_data *data)

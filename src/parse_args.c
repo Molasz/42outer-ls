@@ -6,7 +6,7 @@
 /*   By: molasz-a <molasz-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/11 11:58:22 by molasz-a          #+#    #+#             */
-/*   Updated: 2026/05/20 13:38:30 by molasz-a         ###   ########.fr       */
+/*   Updated: 2026/06/03 12:34:47 by molasz-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,28 +51,30 @@ static int	read_args(char **argv, t_data *data)
 		if (argv[i][0] == '-')
 		{
 			if (read_flag(argv[i] + 1, data))
-				return (1);
+				return (-1);
 		}
 		else
 		{
 			paths++;
 			if (ft_lstadd_alpha(&data->paths, argv[i]))
-				return (1);
+				return (-1);
 		}
 		i++;
 	}
-	if (!paths)
-	{
-		data->paths = ft_pathnew(".");
-		if (!data->paths)
-			return (1);
-	}
-	return (0);
+	return (paths);
 }
 
 int	parse_args(char **argv, t_data *data)
 {
-	if (read_args(argv, data))
+	int	count;
+
+	count = read_args(argv, data);
+	if (count < 0)
 		return (1);
+	if (!count)
+	{
+		if (ft_lstadd_alpha(&data->paths, "."))
+			return (1);
+	}
 	return (0);
 }

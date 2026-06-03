@@ -6,7 +6,7 @@
 /*   By: molasz <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/18 11:05:00 by molasz            #+#    #+#             */
-/*   Updated: 2026/05/20 13:29:44 by molasz-a         ###   ########.fr       */
+/*   Updated: 2026/06/03 12:38:37 by molasz-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,10 @@ int	ft_lstadd_alpha(t_path **lst, char *str)
 	t_path	*path;
 	t_path	*tmp;
 
-    path = ft_pathnew(str);
-    if (!path)
+	path = ft_pathnew(str);
+	if (!path)
 		return (1);
-    if (lstat(str, &path->stat) == -1)
+	if (lstat(str, &path->stat) == -1)
 	{
 		ft_printf("ft_ls: cannot access '%s': %s\n", str, strerror(errno));
 		return (0);
@@ -51,14 +51,14 @@ int	ft_lstadd_alpha(t_path **lst, char *str)
 	{
 		path->next = *lst;
 		*lst = path;
-    }
-    else
-    {
-        tmp = *lst;
-        while (tmp->next && ft_strcmp(tmp->next->path, str) < 0)
-            tmp = tmp->next;
-        path->next = tmp->next;
-        tmp->next = path;
-    }
-    return (0);
+	}
+	else
+	{
+		tmp = *lst;
+		while (tmp->next && ft_strcmp(tmp->next->path, str) < 0)
+			tmp = tmp->next;
+		path->next = tmp->next;
+		tmp->next = path;
+	}
+	return (0);
 }
