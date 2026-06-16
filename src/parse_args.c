@@ -6,7 +6,7 @@
 /*   By: molasz-a <molasz-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/11 11:58:22 by molasz-a          #+#    #+#             */
-/*   Updated: 2026/06/03 17:17:58 by molasz-a         ###   ########.fr       */
+/*   Updated: 2026/06/16 16:30:30 by molasz-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,9 @@ static int	read_flag(char *str, t_data *data)
 
 static int	read_args(char **argv, t_data *data)
 {
-	int	i;
-	int	paths;
+	int		i;
+	int		paths;
+	char	*str;
 
 	i = 0;
 	paths = 0;
@@ -56,7 +57,8 @@ static int	read_args(char **argv, t_data *data)
 		else
 		{
 			paths++;
-			if (ft_diradd(data, argv[i]))
+			str = ft_strdup(argv[i]);
+			if (!str || ft_diradd(data, str))
 				return (-1);
 		}
 		i++;
@@ -66,14 +68,16 @@ static int	read_args(char **argv, t_data *data)
 
 int	parse_args(char **argv, t_data *data)
 {
-	int	count;
+	char	*str;
+	int		count;
 
 	count = read_args(argv, data);
 	if (count < 0)
 		return (1);
 	if (!count)
 	{
-		if (ft_diradd(data, "."))
+		str = ft_strdup(".");
+		if (!str || ft_diradd(data, str))
 			return (1);
 	}
 	return (0);

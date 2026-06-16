@@ -6,7 +6,7 @@
 /*   By: molasz-a <molasz-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/11 11:58:35 by molasz-a          #+#    #+#             */
-/*   Updated: 2026/06/03 17:28:36 by molasz-a         ###   ########.fr       */
+/*   Updated: 2026/06/16 16:31:56 by molasz-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static void	free_dirs(t_dir *dirs)
 	while (dir)
 	{
 		tmp = dir->next;
-		//free(dir->path);
+		free(dir->path);
 		free_entries(dir->entries);
 		free(dir);
 		dir = tmp;
@@ -65,10 +65,10 @@ static void	debug_dirs(t_dir *dirs)
 		entry = dir->entries;
 		while (entry)
 		{
-			ft_printf("%s ", entry->name);
+			ft_printf("%s  ", entry->name);
 			entry = entry->next;
 		}
-		ft_printf("\n");
+		ft_printf("\n\n");
 		dir = dir->next;
 	}
 }

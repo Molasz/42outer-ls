@@ -6,7 +6,7 @@
 /*   By: molasz-a <molasz-a@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/03 15:20:08 by molasz-a          #+#    #+#             */
-/*   Updated: 2026/06/03 17:25:28 by molasz-a         ###   ########.fr       */
+/*   Updated: 2026/06/16 16:33:22 by molasz-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,6 +138,7 @@ int	ft_diradd(t_data *data, char *path)
 {
 	t_dir		*dir;
 	struct stat	st;
+
 	if (lstat(path, &st) == -1)
 	{
 		ft_printf("ft_ls: cannot access '%s': %s\n", path, strerror(errno));
@@ -149,7 +150,8 @@ int	ft_diradd(t_data *data, char *path)
 		if (!dir)
 			return (1);
 		dir_enqueue(data, dir);
-		ft_opendir(data, dir);
+		if (ft_opendir(data, dir))
+			return (1);
 	}
 	else
 	{
