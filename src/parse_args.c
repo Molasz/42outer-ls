@@ -6,7 +6,7 @@
 /*   By: molasz-a <molasz-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/11 11:58:22 by molasz-a          #+#    #+#             */
-/*   Updated: 2026/06/16 16:30:30 by molasz-a         ###   ########.fr       */
+/*   Updated: 2026/06/17 15:21:52 by molasz-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,13 @@ static int	read_args(char **argv, t_data *data)
 		{
 			paths++;
 			str = ft_strdup(argv[i]);
-			if (!str || ft_diradd(data, str))
+			if (!str)
 				return (-1);
+			if (ft_diradd(data, str))
+			{
+				free(str);
+				return (-1);
+			}
 		}
 		i++;
 	}
@@ -77,8 +82,13 @@ int	parse_args(char **argv, t_data *data)
 	if (!count)
 	{
 		str = ft_strdup(".");
-		if (!str || ft_diradd(data, str))
+		if (!str)
 			return (1);
+		if (ft_diradd(data, str))
+		{
+			free(str);
+			return (1);
+		}
 	}
 	return (0);
 }

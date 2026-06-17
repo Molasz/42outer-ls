@@ -1,0 +1,24 @@
+.:
+a  b  ft_ls  ft_ls_-R  includes  ls_-R  Makefile  obj  printf  README.md  src  
+
+./printf:
+ft_printf.h  libft  libftprintf.a  main.c  Makefile  obj  README.md  src  
+
+./printf/libft:
+ft_atoi.c  ft_atoi.d  ft_atoi.o  ft_bzero.c  ft_bzero.d  ft_bzero.o  ft_calloc.c  ft_calloc.d  ft_calloc.o  ft_isalnum.c  ft_isalnum.d  ft_isalnum.o  ft_isalpha.c  ft_isalpha.d  ft_isalpha.o  ft_isascii.c  ft_isascii.d  ft_isascii.o  ft_isdigit.c  ft_isdigit.d  ft_isdigit.o  ft_isprint.c  ft_isprint.d  ft_isprint.o  ft_itoa.c  ft_itoa.d  ft_itoa.o  ft_lstadd_back_bonus.c  ft_lstadd_front_bonus.c  ft_lstclear_bonus.c  ft_lstdelone_bonus.c  ft_lstiter_bonus.c  ft_lstlast_bonus.c  ft_lstmap_bonus.c  ft_lstnew_bonus.c  ft_lstsize_bonus.c  ft_memchr.c  ft_memchr.d  ft_memchr.o  ft_memcmp.c  ft_memcmp.d  ft_memcmp.o  ft_memcpy.c  ft_memcpy.d  ft_memcpy.o  ft_memmove.c  ft_memmove.d  ft_memmove.o  ft_memset.c  ft_memset.d  ft_memset.o  ft_putchar_fd.c  ft_putchar_fd.d  ft_putchar_fd.o  ft_putendl_fd.c  ft_putendl_fd.d  ft_putendl_fd.o  ft_putnbr_fd.c  ft_putnbr_fd.d  ft_putnbr_fd.o  ft_putstr_fd.c  ft_putstr_fd.d  ft_putstr_fd.o  ft_split.c  ft_split.d  ft_split.o  ft_strchr.c  ft_strchr.d  ft_strchr.o  ft_strdup.c  ft_strdup.d  ft_strdup.o  ft_striteri.c  ft_striteri.d  ft_striteri.o  ft_strjoin.c  ft_strjoin.d  ft_strjoin.o  ft_strlcat.c  ft_strlcat.d  ft_strlcat.o  ft_strlcpy.c  ft_strlcpy.d  ft_strlcpy.o  ft_strlen.c  ft_strlen.d  ft_strlen.o  ft_strmapi.c  ft_strmapi.d  ft_strmapi.o  ft_strncmp.c  ft_strncmp.d  ft_strncmp.o  ft_strnstr.c  ft_strnstr.d  ft_strnstr.o  ft_strrchr.c  ft_strrchr.d  ft_strrchr.o  ft_strtrim.c  ft_strtrim.d  ft_strtrim.o  ft_substr.c  ft_substr.d  ft_substr.o  ft_tolower.c  ft_tolower.d  ft_tolower.o  ft_toupper.c  ft_toupper.d  ft_toupper.o  libft.a  libft.h  Makefile  
+
+./printf/src:
+ft_checks.c  ft_printf.c  ft_putchr.c  ft_puthex.c  ft_puthex_justify.c  ft_puthex_precision.c  ft_putint.c  ft_putint_justify.c  ft_putint_precision.c  ft_putstr.c  ft_putuns.c  ft_putuns_precision.c  ft_strhex.c  ft_utils.c  
+
+./printf/obj:
+ft_checks.d  ft_checks.o  ft_printf.d  ft_printf.o  ft_putchr.d  ft_putchr.o  ft_puthex.d  ft_puthex.o  ft_puthex_justify.d  ft_puthex_justify.o  ft_puthex_precision.d  ft_puthex_precision.o  ft_putint.d  ft_putint.o  ft_putint_justify.d  ft_putint_justify.o  ft_putint_precision.d  ft_putint_precision.o  ft_putstr.d  ft_putstr.o  ft_putuns.d  ft_putuns.o  ft_putuns_precision.d  ft_putuns_precision.o  ft_strhex.d  ft_strhex.o  ft_utils.d  ft_utils.o  
+
+./src:
+ft_add.c  ft_ls.c  parse_args.c  utils.c  
+
+./includes:
+ft_ls.h  
+
+./obj:
+ft_add.d  ft_add.o  ft_ls.d  ft_ls.o  parse_args.d  parse_args.o  utils.d  utils.o  
+

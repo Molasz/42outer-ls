@@ -36,7 +36,6 @@ typedef struct s_dir
 typedef struct s_data
 {
 	t_dir	*dirs;
-	t_dir	*dirs_tail;
 
 	int		l_flag;
 	int		R_flag;

@@ -15,7 +15,6 @@
 static void	init_data(t_data *data)
 {
 	data->dirs = NULL;
-	data->dirs_tail = NULL;
 	data->l_flag = 0;
 	data->R_flag = 0;
 	data->a_flag = 0;

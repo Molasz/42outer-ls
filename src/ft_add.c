@@ -6,7 +6,7 @@
 /*   By: molasz-a <molasz-a@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/03 15:20:08 by molasz-a          #+#    #+#             */
-/*   Updated: 2026/06/16 16:33:22 by molasz-a         ###   ########.fr       */
+/*   Updated: 2026/06/17 15:45:28 by molasz-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,16 +62,19 @@ static t_dir	*ft_dirnew(char *path)
 
 static void dir_enqueue(t_data *data, t_dir *dir)
 {
-	if (!data->dirs)
-	{
-		data->dirs = dir;
-		data->dirs_tail = dir;
-	}
-	else
-	{
-		data->dirs_tail->next = dir;
-		data->dirs_tail = dir;
-	}
+	t_dir *tmp;
+
+    if (!data->dirs || ft_strcmp(data->dirs->path, dir->path) > 0)
+    {
+        dir->next = data->dirs;
+        data->dirs = dir;
+        return ;
+    }
+    tmp = data->dirs;
+    while (tmp->next && ft_strcmp(tmp->next->path, dir->path) < 0)
+        tmp = tmp->next;
+    dir->next = tmp->next;
+    tmp->next = dir;
 }
 
 static int	ft_opendir(t_data *data, t_dir *dir)
@@ -112,19 +115,17 @@ static int	ft_opendir(t_data *data, t_dir *dir)
 			free(full_path);
 			continue ;
 		}
+		entry = ft_entrynew(ent->d_name, &st);
+		if (!entry)
+		{
+			closedir(dp);
+			return (1);
+		}
+		entry_insert_alpha(dir, entry);
 		if (data->R_flag && S_ISDIR(st.st_mode))
 			ft_diradd(data, full_path);
 		else
-		{
-			entry = ft_entrynew(ent->d_name, &st);
 			free(full_path);
-			if (!entry)
-			{
-				closedir(dp);
-				return (1);
-			}
-			entry_insert_alpha(dir, entry);
-		}
 	}
 	if (closedir(dp))
 	{
@@ -162,8 +163,6 @@ int	ft_diradd(t_data *data, char *path)
 				return (1);
 			dir->next = data->dirs;
 			data->dirs = dir;
-			if (!data->dirs_tail)
-				data->dirs_tail = dir;
 		}
 		t_entry *entry = ft_entrynew(path, &st);
 		if (!entry)
