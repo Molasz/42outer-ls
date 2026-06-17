@@ -51,27 +51,6 @@ static void	free_dirs(t_dir *dirs)
 	}
 }
 
-static void	debug_dirs(t_dir *dirs)
-{
-	t_dir	*dir;
-	t_entry	*entry;
-
-	dir = dirs;
-	while (dir)
-	{
-		if (dir->path)
-			ft_printf("%s:\n", dir->path);
-		entry = dir->entries;
-		while (entry)
-		{
-			ft_printf("%s  ", entry->name);
-			entry = entry->next;
-		}
-		ft_printf("\n\n");
-		dir = dir->next;
-	}
-}
-
 int	main(int argc, char **argv)
 {
 	t_data	data;
@@ -80,7 +59,7 @@ int	main(int argc, char **argv)
 	init_data(&data);
 	if (parse_args(argv + 1, &data))
 		return (1);
-	debug_dirs(data.dirs);
+	print_dirs(&data);
 	free_dirs(data.dirs);
 	return (0);
 }

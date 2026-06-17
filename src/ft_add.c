@@ -6,7 +6,7 @@
 /*   By: molasz-a <molasz-a@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/03 15:20:08 by molasz-a          #+#    #+#             */
-/*   Updated: 2026/06/17 15:45:28 by molasz-a         ###   ########.fr       */
+/*   Updated: 2026/06/17 16:06:54 by molasz-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,23 @@ static void	entry_insert_alpha(t_dir *dir, t_entry*entry)
 	tmp->next = entry;
 }
 
+static void	entry_insert_time(t_dir *dir, t_entry *entry)
+{
+	t_entry *tmp;
+
+	if (!dir->entries || dir->entries->stat.st_mtime < entry->stat.st_mtime)
+	{
+		entry->next = dir->entries;
+		dir->entries = entry;
+		return ;
+	}
+	tmp = dir->entries;
+	while (tmp->next && tmp->next->stat.st_mtime >= entry->stat.st_mtime)
+		tmp = tmp->next;
+	entry->next = tmp->next;
+	tmp->next = entry;
+}
+
 static t_dir	*ft_dirnew(char *path)
 {
 	t_dir	*dir;
@@ -63,18 +80,18 @@ static t_dir	*ft_dirnew(char *path)
 static void dir_enqueue(t_data *data, t_dir *dir)
 {
 	t_dir *tmp;
-
-    if (!data->dirs || ft_strcmp(data->dirs->path, dir->path) > 0)
-    {
-        dir->next = data->dirs;
-        data->dirs = dir;
-        return ;
-    }
-    tmp = data->dirs;
-    while (tmp->next && ft_strcmp(tmp->next->path, dir->path) < 0)
-        tmp = tmp->next;
-    dir->next = tmp->next;
-    tmp->next = dir;
+	
+	if (!data->dirs || !data->dirs->path || ft_strcmp(data->dirs->path, dir->path) > 0)
+	{
+		dir->next = data->dirs;
+		data->dirs = dir;
+		return ;
+	}
+	tmp = data->dirs;
+	while (tmp->next && tmp->next->path && ft_strcmp(tmp->next->path, dir->path) < 0)
+		tmp = tmp->next;
+	dir->next = tmp->next;
+	tmp->next = dir;
 }
 
 static int	ft_opendir(t_data *data, t_dir *dir)
@@ -98,7 +115,7 @@ static int	ft_opendir(t_data *data, t_dir *dir)
 		if (!ent)
 		{
 			if (errno)
-				printf("ft_ls: cannot read directory '%s': %s\n", dir->path, strerror(errno));
+				ft_printf("ft_ls: cannot read directory '%s': %s\n", dir->path, strerror(errno));
 			break ;
 		}
 		if (!ft_strcmp(ent->d_name, ".") || !ft_strcmp(ent->d_name,"..") || (!data->a_flag && ent->d_name[0] == '.'))
@@ -121,7 +138,10 @@ static int	ft_opendir(t_data *data, t_dir *dir)
 			closedir(dp);
 			return (1);
 		}
-		entry_insert_alpha(dir, entry);
+		if (data->t_flag)
+			entry_insert_time(dir, entry);
+		else
+			entry_insert_alpha(dir, entry);
 		if (data->R_flag && S_ISDIR(st.st_mode))
 			ft_diradd(data, full_path);
 		else
@@ -167,7 +187,10 @@ int	ft_diradd(t_data *data, char *path)
 		t_entry *entry = ft_entrynew(path, &st);
 		if (!entry)
 			return (1);
-		entry_insert_alpha(data->dirs, entry);
+		if (data->t_flag)
+			entry_insert_time(data->dirs, entry);
+		else
+			entry_insert_alpha(data->dirs, entry);
 	}
 	return (0);
 }
