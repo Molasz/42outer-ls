@@ -6,7 +6,7 @@
 /*   By: molasz-a <molasz-a@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/17 16:27:10 by molasz-a          #+#    #+#             */
-/*   Updated: 2026/06/17 16:27:12 by molasz-a         ###   ########.fr       */
+/*   Updated: 2026/06/22 00:24:32 by molasz-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,14 +73,11 @@ static void print_normal(t_entry *entry)
 {
 	ft_printf("%s  ", entry->name);
 }
-static void	print_dir(t_dir *dir, int multiple, void (*fn)(t_entry *))
+static void	print_dir(t_dir *dir, void (*fn)(t_entry *))
 {
 	t_entry	*entry;
 
-	if (multiple)
-		ft_printf("%s:\n", dir->path);
 	entry = dir->entries;
-	print_total(entry);
 	while (entry)
 	{
 		fn(entry);
@@ -102,10 +99,15 @@ void	print_dirs(t_data *data)
 	{
 		while (dir)
 		{
-			if (dir != data->dirs)
-				ft_printf("\n");
-			print_dir(dir, data->R_flag || (data->dirs && data->dirs->next), fn);
+			if (data->R_flag || (data->dirs && data->dirs->next))
+				ft_printf("%s:\n", dir->path);
+			if (data->l_flag)
+				print_total(dir->entries);
+			print_dir(dir, fn);
 			dir = dir->next;
+			if (dir)
+				ft_printf("\n");
+			ft_printf("\n");
 		}
 	}
 }

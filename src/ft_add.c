@@ -6,7 +6,7 @@
 /*   By: molasz-a <molasz-a@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/03 15:20:08 by molasz-a          #+#    #+#             */
-/*   Updated: 2026/06/17 16:06:54 by molasz-a         ###   ########.fr       */
+/*   Updated: 2026/06/22 00:34:38 by molasz-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ static int	ft_opendir(t_data *data, t_dir *dir)
 				ft_printf("ft_ls: cannot read directory '%s': %s\n", dir->path, strerror(errno));
 			break ;
 		}
-		if (!ft_strcmp(ent->d_name, ".") || !ft_strcmp(ent->d_name,"..") || (!data->a_flag && ent->d_name[0] == '.'))
+		if (!data->a_flag && ent->d_name[0] == '.')
 			continue ;
 		full_path = ft_concat_path(dir->path, ent->d_name);
 		if (!full_path)
