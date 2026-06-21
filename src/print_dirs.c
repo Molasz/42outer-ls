@@ -6,7 +6,7 @@
 /*   By: molasz-a <molasz-a@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/17 16:27:10 by molasz-a          #+#    #+#             */
-/*   Updated: 2026/06/22 00:24:32 by molasz-a         ###   ########.fr       */
+/*   Updated: 2026/06/22 01:39:22 by molasz-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,19 +95,16 @@ void	print_dirs(t_data *data)
 	else
 		fn = print_normal;
 	dir = data->dirs;
-	if (!data->r_flag)
+	while (dir)
 	{
-		while (dir)
-		{
-			if (data->R_flag || (data->dirs && data->dirs->next))
-				ft_printf("%s:\n", dir->path);
-			if (data->l_flag)
-				print_total(dir->entries);
-			print_dir(dir, fn);
-			dir = dir->next;
-			if (dir)
-				ft_printf("\n");
+		if (data->R_flag || (data->dirs && data->dirs->next))
+			ft_printf("%s:\n", dir->path);
+		if (data->l_flag)
+			print_total(dir->entries);
+		print_dir(dir, fn);
+		dir = dir->next;
+		if (dir)
 			ft_printf("\n");
-		}
+		ft_printf("\n");
 	}
 }

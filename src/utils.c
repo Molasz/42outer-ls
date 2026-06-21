@@ -18,6 +18,10 @@ int	ft_strcmp(char *s1, char *s2)
 	char	c1;
 	char	c2;
 
+	if (*s1 == '.')
+		s1++;
+	if (*s2 == '.')
+		s2++;
 	i = 0;
 	c1 = ft_tolower(s1[i]);
 	c2 = ft_tolower(s2[i]);
