@@ -60,7 +60,7 @@ static int	read_args(char **argv, t_data *data)
 			str = ft_strdup(argv[i]);
 			if (!str)
 				return (-1);
-			if (ft_diradd(data, str))
+			if (diradd(data, str))
 			{
 				free(str);
 				return (-1);
@@ -84,7 +84,7 @@ int	parse_args(char **argv, t_data *data)
 		str = ft_strdup(".");
 		if (!str)
 			return (1);
-		if (ft_diradd(data, str))
+		if (diradd(data, str))
 		{
 			free(str);
 			return (1);

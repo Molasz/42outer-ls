@@ -48,7 +48,7 @@ typedef struct s_data
 }	t_data;
 
 int		parse_args(char **argv, t_data *data);
-int		ft_diradd(t_data *data, char *path);
+int		diradd(t_data *data, char *path);
 void	print_dirs(t_data *data);
 
 int		ft_strcmp(char *s1, char *s2);

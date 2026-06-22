@@ -12,7 +12,7 @@
 
 #include "ft_ls.h"
 
-static t_entry	*ft_entrynew(char *name, struct stat *st)
+static t_entry	*new_entry(char *name, struct stat *st)
 {
 	t_entry	*entry;
 
@@ -64,7 +64,7 @@ static void	entry_insert_time(t_dir *dir, t_entry *entry)
 	tmp->next = entry;
 }
 
-static t_dir	*ft_dirnew(char *path)
+static t_dir	*new_dir(char *path)
 {
 	t_dir	*dir;
 
@@ -132,7 +132,7 @@ static int	ft_opendir(t_data *data, t_dir *dir)
 			free(full_path);
 			continue ;
 		}
-		entry = ft_entrynew(ent->d_name, &st);
+		entry = new_entry(ent->d_name, &st);
 		if (!entry)
 		{
 			closedir(dp);
@@ -143,7 +143,7 @@ static int	ft_opendir(t_data *data, t_dir *dir)
 		else
 			entry_insert_alpha(dir, entry);
 		if (data->R_flag && S_ISDIR(st.st_mode))
-			ft_diradd(data, full_path);
+			diradd(data, full_path);
 		else
 			free(full_path);
 	}
@@ -155,7 +155,7 @@ static int	ft_opendir(t_data *data, t_dir *dir)
 	return (0);
 }
 
-int	ft_diradd(t_data *data, char *path)
+int	diradd(t_data *data, char *path)
 {
 	t_dir		*dir;
 	struct stat	st;
@@ -167,7 +167,7 @@ int	ft_diradd(t_data *data, char *path)
 	}
 	if (S_ISDIR(st.st_mode))
 	{
-		dir = ft_dirnew(path);
+		dir = new_dir(path);
 		if (!dir)
 			return (1);
 		dir_enqueue(data, dir);
@@ -178,13 +178,13 @@ int	ft_diradd(t_data *data, char *path)
 	{
 		if (!data->dirs || data->dirs->path != NULL)
 		{
-			dir = ft_dirnew(NULL);
+			dir = new_dir(NULL);
 			if (!dir)
 				return (1);
 			dir->next = data->dirs;
 			data->dirs = dir;
 		}
-		t_entry *entry = ft_entrynew(path, &st);
+		t_entry *entry = new_entry(path, &st);
 		if (!entry)
 			return (1);
 		if (data->t_flag)
