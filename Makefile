@@ -6,7 +6,7 @@ PRINTFDIR	= printf
 
 SRCS		= ft_ls.c \
 				parse_args.c \
-				add.c \
+				dir.c \
 				entry.c \
 				print.c \
 				utils.c
