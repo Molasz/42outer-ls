@@ -73,11 +73,17 @@ static void print_normal(t_entry *entry)
 {
 	ft_printf("%s  ", entry->name);
 }
-static void	print_dir(t_dir *dir, void (*fn)(t_entry *))
+static void	print_entries(t_data *data, t_entry *entries)
 {
 	t_entry	*entry;
+	void	(*fn)(t_entry *);
+	
+	if (data->l_flag)
+		fn = print_list;
+	else
+		fn = print_normal;
 
-	entry = dir->entries;
+	entry = entries;
 	while (entry)
 	{
 		fn(entry);
@@ -85,15 +91,10 @@ static void	print_dir(t_dir *dir, void (*fn)(t_entry *))
 	}
 }
 
-void	print_dirs(t_data *data)
+static void	print_dirs(t_data *data)
 {
 	t_dir	*dir;
-	void	(*fn)(t_entry *);
 	
-	if (data->l_flag)
-		fn = print_list;
-	else
-		fn = print_normal;
 	dir = data->dirs;
 	while (dir)
 	{
@@ -101,10 +102,26 @@ void	print_dirs(t_data *data)
 			ft_printf("%s:\n", dir->path);
 		if (data->l_flag)
 			print_total(dir->entries);
-		print_dir(dir, fn);
+		print_entries(data, dir->entries);
 		dir = dir->next;
 		if (dir)
 			ft_printf("\n");
 		ft_printf("\n");
 	}
+}
+
+void print_files(t_data *data)
+{
+	print_entries(data, data->files);
+	ft_printf("\n");
+}
+
+void	print_data(t_data *data)
+{
+	if (data->files)
+		print_files(data);
+	if (data->files && data->dirs)
+		ft_printf("\n");
+	if (data->dirs)
+		print_dirs(data);
 }

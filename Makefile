@@ -7,7 +7,8 @@ PRINTFDIR	= printf
 SRCS		= ft_ls.c \
 				parse_args.c \
 				add.c \
-				print_dirs.c \
+				entry.c \
+				print.c \
 				utils.c
 
 OBJS		= $(addprefix $(ODIR), $(SRCS:.c=.o))

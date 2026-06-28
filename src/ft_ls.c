@@ -15,6 +15,7 @@
 static void	init_data(t_data *data)
 {
 	data->dirs = NULL;
+	data->files = NULL;
 	data->l_flag = 0;
 	data->R_flag = 0;
 	data->a_flag = 0;
@@ -59,7 +60,8 @@ int	main(int argc, char **argv)
 	init_data(&data);
 	if (parse_args(argv + 1, &data))
 		return (1);
-	print_dirs(&data);
+	print_data(&data);
 	free_dirs(data.dirs);
+	free_entries(data.files);
 	return (0);
 }

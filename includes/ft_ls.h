@@ -33,12 +33,14 @@ typedef struct s_dir
 {
     char			*path;
     t_entry			*entries;
+	struct stat		stat;
     struct s_dir	*next;
 } t_dir;
 
 typedef struct s_data
 {
 	t_dir	*dirs;
+	t_entry	*files;
 
 	int		l_flag;
 	int		R_flag;
@@ -49,7 +51,9 @@ typedef struct s_data
 
 int		parse_args(char **argv, t_data *data);
 int		diradd(t_data *data, char *path);
-void	print_dirs(t_data *data);
+void	print_data(t_data *data);
+
+int	add_entry(t_data *data, t_entry **entries, char *path, struct stat *st);
 
 int		ft_strcmp(char *s1, char *s2);
 char	*ft_concat_path(char *s1, char *s2);
