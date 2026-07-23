@@ -38,11 +38,10 @@ static void	read_flag(char *str, t_data *data)
 	}
 }
 
-static int	read_args(char **argv, t_data *data)
+static int	read_flags(char **argv, t_data *data)
 {
 	int		i;
 	int		paths;
-	char	*str;
 
 	i = 0;
 	paths = 0;
@@ -51,8 +50,22 @@ static int	read_args(char **argv, t_data *data)
 		if (argv[i][0] == '-')
 			read_flag(argv[i] + 1, data);
 		else
-		{
 			paths++;
+		i++;
+	}
+	return (paths);
+}
+
+static void	read_args(char **argv, t_data *data)
+{
+	int		i;
+	char	*str;
+
+	i = 0;
+	while (argv[i])
+	{
+		if (argv[i][0] != '-')
+		{
 			str = ft_strdup(argv[i]);
 			if (!str)
 				free_exit(data, 1);
@@ -60,14 +73,15 @@ static int	read_args(char **argv, t_data *data)
 		}
 		i++;
 	}
-	return (paths);
 }
 
 void	parse_args(char **argv, t_data *data)
 {
 	char	*str;
 
-	if (!read_args(argv, data))
+	if (read_flags(argv, data))
+		read_args(argv, data);
+	else
 	{
 		str = ft_strdup(".");
 		if (!str)
