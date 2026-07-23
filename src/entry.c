@@ -12,7 +12,27 @@
 
 #include "ft_ls.h"
 
-static t_entry	*new_entry(char *name, struct stat *st)
+char *symlink_target(char *path, struct stat *st)
+{
+    char    *target;
+    ssize_t len;
+
+    if (!S_ISLNK(st->st_mode))
+        return (NULL);
+    target = malloc(st->st_size + 1);
+    if (!target)
+        return (NULL);
+    len = readlink(path, target, st->st_size + 1);
+    if (len == -1)
+    {
+        free(target);
+        return (NULL);
+    }
+    target[len] = '\0';
+    return (target);
+}
+
+static t_entry	*new_entry(char *name, char *full_path, struct stat *st)
 {
 	t_entry	*entry;
 
@@ -25,6 +45,7 @@ static t_entry	*new_entry(char *name, struct stat *st)
 		free(entry);
 		return (NULL);
 	}
+	entry->symlink = symlink_target(full_path, st);
 	entry->stat = *st;
 	entry->next = NULL;
 	return (entry);
@@ -64,16 +85,15 @@ static void	entry_insert_time(t_entry **a, t_entry *b, int r_flag)
 	tmp->next = b;
 }
 
-int	add_entry(t_data *data, t_entry **entries, char *path, struct stat *st)
+void	add_entry(t_data *data, t_entry **entries, char *name, char *full_path, struct stat *st)
 {
 	t_entry			*entry;
 
-	entry = new_entry(path, st);
+	entry = new_entry(name, full_path, st);
 	if (!entry)
-		return (1);
+		free_exit(data, 1);
 	if (data->t_flag)
 		entry_insert_time(entries, entry, data->r_flag);
 	else
 		entry_insert_alpha(entries, entry, data->r_flag);
-    return (0);
 }

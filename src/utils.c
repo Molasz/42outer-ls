@@ -48,21 +48,9 @@ char	*ft_concat_path(char *s1, char *s2)
 	str = malloc(len1 + len2 + slash + 1);
 	if (!str)
 		return (NULL);
-	i = 0;
-	while (i < len1)
-	{
-		str[i] = s1[i];
-		i++;
-	}
+	i = ft_strlcpy(str, s1, len1 + 1);
 	if (slash)
-		str[i] = '/';
-	i = 0;
-	while (i < len2)
-	{
-		str[len1 + slash + i] = s2[i];
-		i++;
-	}
-	str[len1 + len2 + slash] = '\0';
+		str[i++] = '/';
+	ft_strlcpy(str + i, s2, len2 + 1);
 	return (str);
 }
-

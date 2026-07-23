@@ -80,21 +80,20 @@ static int	read_dir_entry(t_data *data, t_dir *dir, DIR *dp)
 	{
 		if (errno)
 			ft_printf("ft_ls: cannot read directory '%s': %s\n", dir->path, strerror(errno));
-		return (-1);
+		return (1);
 	}
 	if (!data->a_flag && ent->d_name[0] == '.')
 		return (0);
 	full_path = ft_concat_path(dir->path, ent->d_name);
 	if (!full_path)
-		return (1);
+		free_exit(data, 1);
 	if (lstat(full_path, &st) == -1)
 	{
 		ft_printf("ft_ls: cannot access '%s': %s\n", full_path, strerror(errno));
 		free(full_path);
 		return (0);
 	}
-	if (add_entry(data, &dir->entries, ent->d_name, &st))
-		return (1);
+	add_entry(data, &dir->entries, ent->d_name, full_path, &st);
 	if (data->R_flag && S_ISDIR(st.st_mode) && ft_strcmp(ent->d_name, ".") != 0 && ft_strcmp(ent->d_name, "..") != 0)
 		diradd(data, full_path);
 	else
@@ -102,7 +101,7 @@ static int	read_dir_entry(t_data *data, t_dir *dir, DIR *dp)
 	return (0);
 }
 
-static int	ft_opendir(t_data *data, t_dir *dir)
+static void	ft_opendir(t_data *data, t_dir *dir)
 {
 	DIR	*dp;
 	int	ret;
@@ -111,24 +110,19 @@ static int	ft_opendir(t_data *data, t_dir *dir)
 	if (!dp)
 	{
 		ft_printf("ft_ls: cannot open directory '%s': %s\n", dir->path, strerror(errno));
-		return (0);
+		return;
 	}
 	ret = 0;
 	while (ret == 0)
-	{
 		ret = read_dir_entry(data, dir, dp);
-		if (ret > 0)
-			return (1);
-	}
 	if (closedir(dp))
 	{
 		ft_printf("ft_ls: cannot close directory '%s': %s\n", dir->path, strerror(errno));
-		return (1);
+		free_exit(data, 1);
 	}
-	return (0);
 }
 
-int	diradd(t_data *data, char *path)
+void	diradd(t_data *data, char *path)
 {
 	t_dir		*dir;
 	struct stat	st;
@@ -136,21 +130,22 @@ int	diradd(t_data *data, char *path)
 	if (lstat(path, &st) == -1)
 	{
 		ft_printf("ft_ls: cannot access '%s': %s\n", path, strerror(errno));
-		return (0);
+		return;
 	}
 	if (S_ISDIR(st.st_mode))
 	{
 		dir = new_dir(path, &st);
 		if (!dir)
-			return (1);
+		{
+			free(path);
+			free_exit(data, 1);
+		}
 		dir_enqueue(data, dir);
-		if (ft_opendir(data, dir))
-			return (1);
+		ft_opendir(data, dir);
 	}
 	else
 	{
-		add_entry(data, &data->files, path, &st);
+		add_entry(data, &data->files, path, path, &st);
 		free(path);
 	}
-	return (0);
 }

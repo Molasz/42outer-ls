@@ -12,7 +12,7 @@
 
 #include "ft_ls.h"
 
-static int	read_flag(char *str, t_data *data)
+static void	read_flag(char *str, t_data *data)
 {
 	int	i;
 
@@ -32,11 +32,10 @@ static int	read_flag(char *str, t_data *data)
 		else
 		{
 			ft_printf("ft_ls: invalid option -- '%c'\n", str[i]);
-			return (1);
+			free_exit(data, 1);
 		}
 		i++;
 	}
-	return (0);
 }
 
 static int	read_args(char **argv, t_data *data)
@@ -50,45 +49,29 @@ static int	read_args(char **argv, t_data *data)
 	while (argv[i])
 	{
 		if (argv[i][0] == '-')
-		{
-			if (read_flag(argv[i] + 1, data))
-				return (-1);
-		}
+			read_flag(argv[i] + 1, data);
 		else
 		{
 			paths++;
 			str = ft_strdup(argv[i]);
 			if (!str)
-				return (-1);
-			if (diradd(data, str))
-			{
-				free(str);
-				return (-1);
-			}
+				free_exit(data, 1);
+			diradd(data, str);
 		}
 		i++;
 	}
 	return (paths);
 }
 
-int	parse_args(char **argv, t_data *data)
+void	parse_args(char **argv, t_data *data)
 {
 	char	*str;
-	int		count;
 
-	count = read_args(argv, data);
-	if (count < 0)
-		return (1);
-	if (!count)
+	if (!read_args(argv, data))
 	{
 		str = ft_strdup(".");
 		if (!str)
-			return (1);
-		if (diradd(data, str))
-		{
-			free(str);
-			return (1);
-		}
+			free_exit(data, 1);
+		diradd(data, str);
 	}
-	return (0);
 }

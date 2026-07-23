@@ -9,6 +9,7 @@ SRCS		= ft_ls.c \
 				dir.c \
 				entry.c \
 				print.c \
+				free.c \
 				utils.c
 
 OBJS		= $(addprefix $(ODIR), $(SRCS:.c=.o))

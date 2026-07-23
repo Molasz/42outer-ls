@@ -23,45 +23,14 @@ static void	init_data(t_data *data)
 	data->t_flag = 0;
 }
 
-static void	free_entries(t_entry *entry)
-{
-	t_entry	*tmp;
-
-	while (entry)
-	{
-		tmp = entry->next;
-		free(entry->name);
-		free(entry);
-		entry = tmp;
-	}
-}
-
-static void	free_dirs(t_dir *dirs)
-{
-	t_dir	*dir;
-	t_dir	*tmp;
-
-	dir = dirs;
-	while (dir)
-	{
-		tmp = dir->next;
-		free(dir->path);
-		free_entries(dir->entries);
-		free(dir);
-		dir = tmp;
-	}
-}
-
 int	main(int argc, char **argv)
 {
 	t_data	data;
 
 	(void) argc;
 	init_data(&data);
-	if (parse_args(argv + 1, &data))
-		return (1);
+	parse_args(argv + 1, &data);
 	print_data(&data);
-	free_dirs(data.dirs);
-	free_entries(data.files);
+	free_exit(&data, 0);
 	return (0);
 }

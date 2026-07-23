@@ -25,6 +25,7 @@
 typedef struct s_entry
 {
 	char			*name;
+	char        	*symlink;
 	struct stat		stat;
 	struct s_entry	*next;
 } t_entry;
@@ -49,12 +50,22 @@ typedef struct s_data
 	int		t_flag;
 }	t_data;
 
-int		parse_args(char **argv, t_data *data);
-int		diradd(t_data *data, char *path);
+// free.c
+void    free_exit(t_data *data, int exitCode);
+
+// parse.c
+void	parse_args(char **argv, t_data *data);
+
+// dir.c
+void	diradd(t_data *data, char *path);
+
+// entry.c
+void	add_entry(t_data *data, t_entry **entries, char *name, char *full_path, struct stat *st);
+
+// print.c
 void	print_data(t_data *data);
 
-int	add_entry(t_data *data, t_entry **entries, char *path, struct stat *st);
-
+// utils.c
 int		ft_strcmp(char *s1, char *s2);
 char	*ft_concat_path(char *s1, char *s2);
 

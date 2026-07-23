@@ -64,9 +64,12 @@ static void print_list(t_entry *entry)
 	ft_printf(" %d", entry->stat.st_nlink);
 	ft_printf(" %s", pw ? pw->pw_name : "?");
 	ft_printf(" %s", gr ? gr->gr_name : "?");
-	ft_printf(" %d", entry->stat.st_size);
+	ft_printf(" %5d", entry->stat.st_size);
 	ft_printf(" %.12s", time + 4);
-	ft_printf(" %s\n", entry->name);
+	if (entry->symlink)
+        ft_printf(" %s -> %s\n", entry->name, entry->symlink);
+	else
+		ft_printf(" %s\n", entry->name);
 }
 
 static void print_normal(t_entry *entry)
@@ -98,28 +101,21 @@ static void	print_dirs(t_data *data)
 	dir = data->dirs;
 	while (dir)
 	{
-		if (data->R_flag || (data->dirs && data->dirs->next))
+		if (data->R_flag || data->files || (data->dirs && data->dirs->next))
 			ft_printf("%s:\n", dir->path);
 		if (data->l_flag)
 			print_total(dir->entries);
 		print_entries(data, dir->entries);
 		dir = dir->next;
-		if (dir)
+		if (dir || !data->l_flag)
 			ft_printf("\n");
-		ft_printf("\n");
 	}
-}
-
-void print_files(t_data *data)
-{
-	print_entries(data, data->files);
-	ft_printf("\n");
 }
 
 void	print_data(t_data *data)
 {
 	if (data->files)
-		print_files(data);
+		print_entries(data, data->files);
 	if (data->files && data->dirs)
 		ft_printf("\n");
 	if (data->dirs)
