@@ -21,6 +21,7 @@ static void	init_data(t_data *data)
 	data->a_flag = 0;
 	data->r_flag = 0;
 	data->t_flag = 0;
+	data->exit_code = 0;
 }
 
 int	main(int argc, char **argv)
@@ -31,6 +32,6 @@ int	main(int argc, char **argv)
 	init_data(&data);
 	parse_args(argv + 1, &data);
 	print_data(&data);
-	free_exit(&data, 0);
+	free_exit(&data, data.exit_code);
 	return (0);
 }

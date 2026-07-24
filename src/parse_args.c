@@ -31,8 +31,10 @@ static void	read_flag(char *str, t_data *data)
 			data->t_flag = 1;
 		else
 		{
-			ft_printf("ft_ls: invalid option -- '%c'\n", str[i]);
-			free_exit(data, 1);
+			ft_putstr_fd("ft_ls: invalid option -- '", 2);
+			ft_putchar_fd(str[i], 2);
+			ft_putstr_fd("'\n", 2);
+			free_exit(data, 2);
 		}
 		i++;
 	}

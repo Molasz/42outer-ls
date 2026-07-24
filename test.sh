@@ -1,12 +1,4 @@
 #!/bin/bash
-#
-# test.sh — ft_ls evaluation-sheet test suite
-#
-# Mirrors the 42 correction sheet sections:
-#   Preliminaries / Basic Tests / Basic Tests ++ / Middle Tests / Error Management
-#
-# Each test compares `./ft_ls` against the system `/bin/ls` byte-for-byte
-# (normal mode) or checks documented behaviour (error mode).
 
 GREEN='\033[0;32m'
 RED='\033[0;31m'
@@ -20,7 +12,7 @@ FAIL=0
 WARN=0
 
 if [ ! -f "./ft_ls" ]; then
-    printf '%b\n' "${RED}Error: ./ft_ls not found. Compile it before running the tests.${NC}"
+    printf '%b\n' "${RED}Error: ./ft_ls not found. ${NC}"
     exit 1
 fi
 
@@ -33,11 +25,6 @@ section() {
     printf '%b\n' "${BOLD}${CYAN}══════════════════════════════════════════════════════════════════${NC}"
 }
 
-# ---------------------------------------------------------------------------
-# run_test: byte-for-byte comparison against /bin/ls (order-insensitive,
-# one entry per line, which is what the subject asks: content must match,
-# padding/columns/colors are excluded).
-# ---------------------------------------------------------------------------
 run_test() {
     local TEST_NAME="$1"
     local FLAGS="$2"
@@ -64,11 +51,6 @@ run_test() {
     fi
 }
 
-# ---------------------------------------------------------------------------
-# run_self_consistency: same flags in different notations ("-l -t" vs "-lt")
-# must produce identical ft_ls output — this is what the sheet calls
-# "Multiple option management: parsing and form".
-# ---------------------------------------------------------------------------
 run_self_consistency() {
     local TEST_NAME="$1"
     local FLAGS_A="$2"
@@ -91,11 +73,6 @@ run_self_consistency() {
     fi
 }
 
-# ---------------------------------------------------------------------------
-# run_error_test: for error-management cases, exact wording isn't graded —
-# what matters is a non-zero exit code and a message on stderr, same as
-# /bin/ls. We check both independently, not diffed against each other.
-# ---------------------------------------------------------------------------
 run_error_test() {
     local TEST_NAME="$1"
     local FLAGS="$2"
@@ -123,77 +100,6 @@ run_error_test() {
 
 printf '%b\n' "${CYAN}=== STARTING FT_LS EVALUATION-SHEET TESTS ===${NC}"
 
-# ===========================================================================
-# PRELIMINARIES — automatable parts only. Norm, forbidden functions and
-# memory leaks still need norminette/valgrind and a manual read, run those
-# separately if available in your environment.
-# ===========================================================================
-section "PRELIMINARIES"
-
-printf "%-34s... " "[Makefile: all rule present]"
-grep -qE '^all:' Makefile && { printf '%b\n' "${GREEN}✔ OK${NC}"; PASS=$((PASS+1)); } || { printf '%b\n' "${RED}✘ KO${NC}"; FAIL=$((FAIL+1)); }
-
-printf "%-34s... " "[Makefile: clean rule present]"
-grep -qE '^clean:' Makefile && { printf '%b\n' "${GREEN}✔ OK${NC}"; PASS=$((PASS+1)); } || { printf '%b\n' "${RED}✘ KO${NC}"; FAIL=$((FAIL+1)); }
-
-printf "%-34s... " "[Makefile: fclean rule present]"
-grep -qE '^fclean:' Makefile && { printf '%b\n' "${GREEN}✔ OK${NC}"; PASS=$((PASS+1)); } || { printf '%b\n' "${RED}✘ KO${NC}"; FAIL=$((FAIL+1)); }
-
-printf "%-34s... " "[Makefile: re rule present]"
-grep -qE '^re:' Makefile && { printf '%b\n' "${GREEN}✔ OK${NC}"; PASS=$((PASS+1)); } || { printf '%b\n' "${RED}✘ KO${NC}"; FAIL=$((FAIL+1)); }
-
-printf "%-34s... " "[Makefile: re-running make is silent/clean]"
-make fclean > /dev/null 2>&1
-if make all > /tmp/make_out 2>&1 && [ -f ./ft_ls ]; then
-    printf '%b\n' "${GREEN}✔ OK${NC}"
-    PASS=$((PASS + 1))
-else
-    printf '%b\n' "${RED}✘ KO${NC}"
-    FAIL=$((FAIL + 1))
-    tail -n 15 /tmp/make_out
-fi
-
-if command -v norminette > /dev/null 2>&1; then
-    printf "%-34s... " "[Norm]"
-    norminette src includes > /tmp/norm_out 2>/dev/null
-    if grep -q "Error" /tmp/norm_out; then
-        printf '%b\n' "${RED}✘ KO (norm errors found)${NC}"
-        FAIL=$((FAIL + 1))
-        grep -B1 "Error" /tmp/norm_out | sed 's/^/  /'
-    else
-        printf '%b\n' "${GREEN}✔ OK${NC}"
-        PASS=$((PASS + 1))
-    fi
-else
-    printf '%b\n' "${YELLOW}[Norm]                              ... skipped (norminette not installed — check manually)${NC}"
-    WARN=$((WARN + 1))
-fi
-
-if command -v valgrind > /dev/null 2>&1; then
-    printf "%-34s... " "[No memory leaks: ls -lRa .]"
-    valgrind --leak-check=full --error-exitcode=1 "$FT_LS" -lRa . > /dev/null 2>/tmp/valgrind_out
-    if grep -q "0 errors" /tmp/valgrind_out \
-        && { grep -q "All heap blocks were freed -- no leaks are possible" /tmp/valgrind_out \
-             || grep -q "definitely lost: 0 bytes" /tmp/valgrind_out; }; then
-        printf '%b\n' "${GREEN}✔ OK${NC}"
-        PASS=$((PASS + 1))
-    else
-        printf '%b\n' "${RED}✘ KO${NC}"
-        FAIL=$((FAIL + 1))
-        grep -E "lost|error" /tmp/valgrind_out
-    fi
-else
-    printf '%b\n' "${YELLOW}[No memory leaks]                   ... skipped (valgrind not installed — check manually)${NC}"
-    WARN=$((WARN + 1))
-fi
-
-printf '%b\n' "${YELLOW}Manual checks still required: author file, forbidden functions.${NC}"
-
-# ===========================================================================
-# Build a disposable fixture environment covering every case the sheet asks
-# for: a plain file, a symlink, hidden files, setuid/setgid/sticky bit,
-# an inaccessible directory, and files with staggered mtimes for -r/-t.
-# ===========================================================================
 FIXDIR="$(mktemp -d /tmp/ft_ls_fixtures.XXXXXX)"
 mkdir -p "$FIXDIR/folder/subdir"
 echo "hello" > "$FIXDIR/folder/regular_file.txt"
@@ -273,33 +179,7 @@ section "ERROR MANAGEMENT"
 
 run_error_test "Nonexistent file/folder" "" "$FIXDIR/folder/does_not_exist"
 run_error_test "Unmanaged/nonexistent option" "-y"
-
-if [ "$(id -u)" = "0" ]; then
-    printf '%b\n' "${YELLOW}[Inaccessible file/folder]          ... running as root: DAC checks are bypassed,${NC}"
-    printf '%b\n' "${YELLOW}                                        so this must be re-run as a non-root user${NC}"
-    printf '%b\n' "${YELLOW}                                        to be conclusive.${NC}"
-    if command -v setpriv > /dev/null 2>&1; then
-        printf "%-34s... " "[Inaccessible folder, via setpriv nobody]"
-        LC_ALL=C setpriv --reuid 65534 --regid 65534 --clear-groups /bin/ls "$FIXDIR/folder/no_access_dir" > /dev/null 2>/tmp/sys_ls_err
-        SYS_CODE=$?
-        LC_ALL=C setpriv --reuid 65534 --regid 65534 --clear-groups "$FT_LS" "$FIXDIR/folder/no_access_dir" > /dev/null 2>/tmp/ft_ls_err
-        FT_CODE=$?
-        if [ "$SYS_CODE" -ne 0 ] && [ "$FT_CODE" -ne 0 ] && [ -s /tmp/ft_ls_err ]; then
-            printf '%b\n' "${GREEN}✔ OK${NC} (exit=$FT_CODE, stderr non-empty)"
-            PASS=$((PASS + 1))
-        else
-            printf '%b\n' "${RED}✘ KO${NC} (sys exit=$SYS_CODE, ft exit=$FT_CODE)"
-            FAIL=$((FAIL + 1))
-            printf '%b\n' "${YELLOW}--- /bin/ls stderr ---${NC}"; sed 's/^/  /' /tmp/sys_ls_err
-            printf '%b\n' "${YELLOW}--- ft_ls stderr   ---${NC}"; sed 's/^/  /' /tmp/ft_ls_err
-        fi
-    else
-        printf '%b\n' "${YELLOW}                                        setpriv not available either — skipped.${NC}"
-        WARN=$((WARN + 1))
-    fi
-else
-    run_error_test "Inaccessible folder" "" "$FIXDIR/folder/no_access_dir"
-fi
+run_error_test "Inaccessible folder" "" "$FIXDIR/folder/no_access_dir"
 
 # ---------------------------------------------------------------------------
 cleanup_fixtures

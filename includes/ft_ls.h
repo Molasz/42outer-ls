@@ -48,11 +48,12 @@ typedef struct s_data
 	int		a_flag;
 	int		r_flag;
 	int		t_flag;
+	int		exit_code;
 }	t_data;
 
 // free
 void	free_exit(t_data *data, int exitCode);
-void	print_errno(char *err, char *path);
+void	print_errno(t_data *data, char *err, char *path);
 void	free_dirs(t_dir *dirs);
 
 // parse_args

@@ -50,14 +50,14 @@ void	free_exit(t_data *data, int exitCode)
 	exit(exitCode);
 }
 
-void	print_errno(char *err, char *path)
+void	print_errno(t_data *data, char *err, char *path)
 {
 	ft_putstr_fd("ft_ls: cannot ", 2);
 	ft_putstr_fd(err, 2);
 	ft_putstr_fd(" '", 2);
 	ft_putstr_fd(path, 2);
 	ft_putstr_fd("': ", 2);
-	ft_putstr_fd(path, 2);
 	ft_putstr_fd(strerror(errno), 2);
 	ft_putstr_fd("\n", 2);
+	data->exit_code = 2;
 }

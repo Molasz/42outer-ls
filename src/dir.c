@@ -20,7 +20,7 @@ static void	read_path(t_data *d, t_dir *dir, struct stat st, struct dirent *en)
 	if (!full_path)
 		free_exit(d, 1);
 	if (lstat(full_path, &st) == -1)
-		print_errno("access", full_path);
+		print_errno(d, "access", full_path);
 	add_entry(d, &dir->entries, en->d_name, full_path);
 	free(full_path);
 }
@@ -35,7 +35,7 @@ static int	read_dir_entry(t_data *data, t_dir *dir, DIR *dp)
 	if (!ent)
 	{
 		if (errno)
-			print_errno("read directory", dir->path);
+			print_errno(data, "read directory", dir->path);
 		return (1);
 	}
 	if (ent->d_name[0] != '.' || data->a_flag)
@@ -43,7 +43,7 @@ static int	read_dir_entry(t_data *data, t_dir *dir, DIR *dp)
 	return (0);
 }
 
-static void	ft_opendir(t_data *data, t_dir *dir)
+static int	ft_opendir(t_data *data, t_dir *dir)
 {
 	DIR	*dp;
 	int	ret;
@@ -51,17 +51,18 @@ static void	ft_opendir(t_data *data, t_dir *dir)
 	dp = opendir(dir->path);
 	if (!dp)
 	{
-		print_errno("open directory", dir->path);
-		return ;
+		print_errno(data, "open directory", dir->path);
+		return (1);
 	}
 	ret = 0;
 	while (ret == 0)
 		ret = read_dir_entry(data, dir, dp);
 	if (closedir(dp))
 	{
-		print_errno("close directory", dir->path);
+		print_errno(data, "close directory", dir->path);
 		free_exit(data, 1);
 	}
+	return (0);
 }
 
 t_dir	*read_subdir(t_data *data, char *path)
@@ -71,7 +72,7 @@ t_dir	*read_subdir(t_data *data, char *path)
 
 	if (lstat(path, &st) == -1)
 	{
-		print_errno("access", path);
+		print_errno(data, "access", path);
 		free(path);
 		return (NULL);
 	}
@@ -86,7 +87,8 @@ t_dir	*read_subdir(t_data *data, char *path)
 		free(path);
 		free_exit(data, 1);
 	}
-	ft_opendir(data, dir);
+	if (ft_opendir(data, dir))
+		return (NULL);
 	return (dir);
 }
 
@@ -97,7 +99,7 @@ void	add_dir(t_data *data, char *path)
 
 	if (lstat(path, &st) == -1)
 	{
-		print_errno("access", path);
+		print_errno(data, "access", path);
 		return ;
 	}
 	if (S_ISDIR(st.st_mode))
