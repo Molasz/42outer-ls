@@ -12,29 +12,30 @@
 
 #include "ft_ls.h"
 
-char *symlink_target(char *path, struct stat *st)
+char	*symlink_target(char *path, struct stat *st)
 {
-    char    *target;
-    ssize_t len;
+	char	*target;
+	ssize_t	len;
 
-    if (!S_ISLNK(st->st_mode))
-        return (NULL);
-    target = malloc(st->st_size + 1);
-    if (!target)
-        return (NULL);
-    len = readlink(path, target, st->st_size + 1);
-    if (len == -1)
-    {
-        free(target);
-        return (NULL);
-    }
-    target[len] = '\0';
-    return (target);
+	if (!S_ISLNK(st->st_mode))
+		return (NULL);
+	target = malloc(st->st_size + 1);
+	if (!target)
+		return (NULL);
+	len = readlink(path, target, st->st_size + 1);
+	if (len == -1)
+	{
+		free(target);
+		return (NULL);
+	}
+	target[len] = '\0';
+	return (target);
 }
 
-static t_entry	*new_entry(char *name, char *full_path, struct stat *st)
+static t_entry	*new_entry(char *name, char *full_path)
 {
-	t_entry	*entry;
+	t_entry		*entry;
+	struct stat	st;
 
 	entry = malloc(sizeof (t_entry));
 	if (!entry)
@@ -45,24 +46,27 @@ static t_entry	*new_entry(char *name, char *full_path, struct stat *st)
 		free(entry);
 		return (NULL);
 	}
-	entry->symlink = symlink_target(full_path, st);
-	entry->stat = *st;
+	lstat(full_path, &st);
+	entry->symlink = symlink_target(full_path, &st);
+	entry->stat = st;
 	entry->next = NULL;
 	return (entry);
 }
 
 static void	entry_insert_alpha(t_entry **a, t_entry *b, int r_flag)
 {
-	t_entry *tmp;
+	t_entry	*tmp;
 
-	if (!*a || (!r_flag && ft_strcmp((*a)->name, b->name) > 0) || (r_flag && ft_strcmp((*a)->name, b->name) < 0))
+	if (!*a || (!r_flag && ft_strcmp((*a)->name, b->name) > 0)
+		|| (r_flag && ft_strcmp((*a)->name, b->name) < 0))
 	{
 		b->next = *a;
 		*a = b;
 		return ;
 	}
 	tmp = *a;
-	while (tmp->next && ( (!r_flag && ft_strcmp(tmp->next->name, b->name) < 0) || (r_flag && ft_strcmp(tmp->next->name, b->name) > 0)))
+	while (tmp->next && ((!r_flag && ft_strcmp(tmp->next->name, b->name) < 0)
+			|| (r_flag && ft_strcmp(tmp->next->name, b->name) > 0)))
 		tmp = tmp->next;
 	b->next = tmp->next;
 	tmp->next = b;
@@ -70,26 +74,29 @@ static void	entry_insert_alpha(t_entry **a, t_entry *b, int r_flag)
 
 static void	entry_insert_time(t_entry **a, t_entry *b, int r_flag)
 {
-	t_entry *tmp;
+	t_entry	*tmp;
 
-	if (!*a || (!r_flag && (*a)->stat.st_mtime < b->stat.st_mtime) || (r_flag && (*a)->stat.st_mtime >= b->stat.st_mtime))
+	if (!*a || (!r_flag && (*a)->stat.st_mtime < b->stat.st_mtime)
+		|| (r_flag && (*a)->stat.st_mtime >= b->stat.st_mtime))
 	{
 		b->next = (*a);
 		*a = b;
 		return ;
 	}
 	tmp = *a;
-	while (tmp->next && ((!r_flag && tmp->next->stat.st_mtime >= b->stat.st_mtime) || (r_flag && tmp->next->stat.st_mtime < b->stat.st_mtime)))
+	while (tmp->next
+		&& ((!r_flag && tmp->next->stat.st_mtime >= b->stat.st_mtime)
+			|| (r_flag && tmp->next->stat.st_mtime < b->stat.st_mtime)))
 		tmp = tmp->next;
 	b->next = tmp->next;
 	tmp->next = b;
 }
 
-void	add_entry(t_data *data, t_entry **entries, char *name, char *full_path, struct stat *st)
+void	add_entry(t_data *data, t_entry **entries, char *name, char *full_path)
 {
 	t_entry			*entry;
 
-	entry = new_entry(name, full_path, st);
+	entry = new_entry(name, full_path);
 	if (!entry)
 		free_exit(data, 1);
 	if (data->t_flag)

@@ -49,3 +49,8 @@ void	free_exit(t_data *data, int exitCode)
 	free_entries(data->files);
 	exit(exitCode);
 }
+
+void	print_errno(char *err, char *path)
+{
+	ft_printf("ft_ls: cannot %s '%s': %s\n", err, path, strerror(errno));
+}

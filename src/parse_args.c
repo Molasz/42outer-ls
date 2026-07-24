@@ -22,7 +22,7 @@ static void	read_flag(char *str, t_data *data)
 		if (str[i] == 'l')
 			data->l_flag = 1;
 		else if (str[i] == 'R')
-			data->R_flag = 1;
+			data->rec_flag = 1;
 		else if (str[i] == 'a')
 			data->a_flag = 1;
 		else if (str[i] == 'r')
@@ -69,7 +69,7 @@ static void	read_args(char **argv, t_data *data)
 			str = ft_strdup(argv[i]);
 			if (!str)
 				free_exit(data, 1);
-			diradd(data, str);
+			add_dir(data, str);
 		}
 		i++;
 	}
@@ -86,6 +86,6 @@ void	parse_args(char **argv, t_data *data)
 		str = ft_strdup(".");
 		if (!str)
 			free_exit(data, 1);
-		diradd(data, str);
+		add_dir(data, str);
 	}
 }

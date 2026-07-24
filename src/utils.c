@@ -54,3 +54,11 @@ char	*ft_concat_path(char *s1, char *s2)
 	ft_strlcpy(str + i, s2, len2 + 1);
 	return (str);
 }
+
+char	*ft_ternary(int con, char *a, char *b)
+{
+	if (con)
+		return (a);
+	else
+		return (b);
+}

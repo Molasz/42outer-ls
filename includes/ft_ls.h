@@ -25,18 +25,18 @@
 typedef struct s_entry
 {
 	char			*name;
-	char        	*symlink;
+	char			*symlink;
 	struct stat		stat;
 	struct s_entry	*next;
-} t_entry;
+}	t_entry;
 
 typedef struct s_dir
 {
-    char			*path;
-    t_entry			*entries;
+	char			*path;
+	t_entry			*entries;
 	struct stat		stat;
-    struct s_dir	*next;
-} t_dir;
+	struct s_dir	*next;
+}	t_dir;
 
 typedef struct s_data
 {
@@ -44,29 +44,33 @@ typedef struct s_data
 	t_entry	*files;
 
 	int		l_flag;
-	int		R_flag;
+	int		rec_flag;
 	int		a_flag;
 	int		r_flag;
 	int		t_flag;
 }	t_data;
 
-// free.c
-void    free_exit(t_data *data, int exitCode);
+// free
+void	free_exit(t_data *data, int exitCode);
+void	print_errno(char *err, char *path);
 
-// parse.c
+// parse_args
 void	parse_args(char **argv, t_data *data);
 
-// dir.c
-void	diradd(t_data *data, char *path);
+// dir
+void	add_dir(t_data *data, char *path);
+void	dir_enqueue(t_data *data, t_dir *dir);
 
-// entry.c
-void	add_entry(t_data *data, t_entry **entries, char *name, char *full_path, struct stat *st);
+// entry
+void	add_entry(t_data *data, t_entry **entries, char *name, char *full_path);
 
-// print.c
+// print
 void	print_data(t_data *data);
+void	print_list(t_entry *entry);
 
-// utils.c
+// utils
 int		ft_strcmp(char *s1, char *s2);
 char	*ft_concat_path(char *s1, char *s2);
+char	*ft_ternary(int con, char *a, char *b);
 
 #endif

@@ -7,8 +7,10 @@ PRINTFDIR	= printf
 SRCS		= ft_ls.c \
 				parse_args.c \
 				dir.c \
+				dir_sort.c \
 				entry.c \
 				print.c \
+				print_list.c \
 				free.c \
 				utils.c
 

@@ -26,78 +26,42 @@ static t_dir	*new_dir(char *path, struct stat *st)
 	return (dir);
 }
 
-static void	dir_insert_alpha(t_dir **a, t_dir *b, int r_flag)
+static void	read_path(t_data *d, t_dir *dir, struct stat st, struct dirent *en)
 {
-	t_dir *tmp;
+	char			*full_path;
 
-	if (!*a || (!r_flag && ft_strcmp((*a)->path, b->path) > 0) || (r_flag && ft_strcmp((*a)->path, b->path) < 0))
+	full_path = ft_concat_path(dir->path, en->d_name);
+	if (!full_path)
+		free_exit(d, 1);
+	if (lstat(full_path, &st) == -1)
 	{
-		b->next = *a;
-		*a = b;
-		return ;
+		print_errno("access", full_path);
+		free(full_path);
 	}
-	tmp = *a;
-	while (tmp->next && ((!r_flag && ft_strcmp(tmp->next->path, b->path) < 0) || (r_flag && ft_strcmp(tmp->next->path, b->path) > 0)))
-		tmp = tmp->next;
-	b->next = tmp->next;
-	tmp->next = b;
-}
-
-static void	dir_insert_time(t_dir **a, t_dir *b, int r_flag)
-{
-	t_dir *tmp;
-
-	if (!*a || (!r_flag && (*a)->stat.st_mtime < b->stat.st_mtime) || (r_flag && (*a)->stat.st_mtime >= b->stat.st_mtime))
-	{
-		b->next = (*a);
-		*a = b;
-		return ;
-	}
-	tmp = *a;
-	while (tmp->next && ((!r_flag && tmp->next->stat.st_mtime >= b->stat.st_mtime) || (r_flag && tmp->next->stat.st_mtime < b->stat.st_mtime)))
-		tmp = tmp->next;
-	b->next = tmp->next;
-	tmp->next = b;
-}	
-
-static void dir_enqueue(t_data *data, t_dir *dir)
-{
-	if (data->t_flag)
-		dir_insert_time(&data->dirs, dir, data->r_flag);
+	add_entry(d, &dir->entries, en->d_name, full_path);
+	if (d->rec_flag && S_ISDIR(st.st_mode)
+		&& ft_strcmp(en->d_name, ".") != 0
+		&& ft_strcmp(en->d_name, "..") != 0)
+		add_dir(d, full_path);
 	else
-		dir_insert_alpha(&data->dirs, dir, data->r_flag);
+		free(full_path);
 }
 
 static int	read_dir_entry(t_data *data, t_dir *dir, DIR *dp)
 {
 	struct stat		st;
 	struct dirent	*ent;
-	char			*full_path;
 
 	errno = 0;
 	ent = readdir(dp);
 	if (!ent)
 	{
 		if (errno)
-			ft_printf("ft_ls: cannot read directory '%s': %s\n", dir->path, strerror(errno));
+			print_errno("read directory", dir->path);
 		return (1);
 	}
-	if (!data->a_flag && ent->d_name[0] == '.')
-		return (0);
-	full_path = ft_concat_path(dir->path, ent->d_name);
-	if (!full_path)
-		free_exit(data, 1);
-	if (lstat(full_path, &st) == -1)
-	{
-		ft_printf("ft_ls: cannot access '%s': %s\n", full_path, strerror(errno));
-		free(full_path);
-		return (0);
-	}
-	add_entry(data, &dir->entries, ent->d_name, full_path, &st);
-	if (data->R_flag && S_ISDIR(st.st_mode) && ft_strcmp(ent->d_name, ".") != 0 && ft_strcmp(ent->d_name, "..") != 0)
-		diradd(data, full_path);
-	else
-		free(full_path);
+	if (ent->d_name[0] != '.' || data->a_flag)
+		read_path(data, dir, st, ent);
 	return (0);
 }
 
@@ -109,28 +73,28 @@ static void	ft_opendir(t_data *data, t_dir *dir)
 	dp = opendir(dir->path);
 	if (!dp)
 	{
-		ft_printf("ft_ls: cannot open directory '%s': %s\n", dir->path, strerror(errno));
-		return;
+		print_errno("open directory", dir->path);
+		return ;
 	}
 	ret = 0;
 	while (ret == 0)
 		ret = read_dir_entry(data, dir, dp);
 	if (closedir(dp))
 	{
-		ft_printf("ft_ls: cannot close directory '%s': %s\n", dir->path, strerror(errno));
+		print_errno("close directory", dir->path);
 		free_exit(data, 1);
 	}
 }
 
-void	diradd(t_data *data, char *path)
+void	add_dir(t_data *data, char *path)
 {
 	t_dir		*dir;
 	struct stat	st;
 
 	if (lstat(path, &st) == -1)
 	{
-		ft_printf("ft_ls: cannot access '%s': %s\n", path, strerror(errno));
-		return;
+		print_errno("access", path);
+		return ;
 	}
 	if (S_ISDIR(st.st_mode))
 	{
@@ -145,7 +109,7 @@ void	diradd(t_data *data, char *path)
 	}
 	else
 	{
-		add_entry(data, &data->files, path, path, &st);
+		add_entry(data, &data->files, path, path);
 		free(path);
 	}
 }
