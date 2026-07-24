@@ -59,7 +59,7 @@ void	print_list(t_entry *entry)
 	ft_printf(" %d", entry->stat.st_nlink);
 	ft_printf(" %s", ft_ternary(pw != 0, (char *)pw->pw_name, "?"));
 	ft_printf(" %s", ft_ternary(gr != 0, (char *)gr->gr_name, "?"));
-	ft_printf(" %d", entry->stat.st_size);
+	ft_printf(" %4d", entry->stat.st_size);
 	ft_printf(" %.12s", time + 4);
 	if (entry->symlink)
 		ft_printf(" %s -> %s\n", entry->name, entry->symlink);

@@ -47,6 +47,8 @@ static void	print_entries(t_data *data, t_entry *entries)
 		fn(entry);
 		entry = entry->next;
 	}
+	if (!data->l_flag && entries)
+		ft_printf("\n");
 }
 
 static void	print_dirs(t_data *data)
@@ -58,11 +60,11 @@ static void	print_dirs(t_data *data)
 	{
 		if (data->rec_flag || data->files || (data->dirs && data->dirs->next))
 			ft_printf("%s:\n", dir->path);
-		if (data->l_flag)
+		if (data->l_flag && dir->entries)
 			print_total(dir->entries);
 		print_entries(data, dir->entries);
 		dir = dir->next;
-		if (dir || !data->l_flag)
+		if (dir)
 			ft_printf("\n");
 	}
 }
