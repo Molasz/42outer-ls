@@ -53,20 +53,25 @@ typedef struct s_data
 // free
 void	free_exit(t_data *data, int exitCode);
 void	print_errno(char *err, char *path);
+void	free_dirs(t_dir *dirs);
 
 // parse_args
 void	parse_args(char **argv, t_data *data);
 
 // dir
 void	add_dir(t_data *data, char *path);
+t_dir	*new_dir(char *path, struct stat *st);
 void	dir_enqueue(t_data *data, t_dir *dir);
+t_dir	*read_subdir(t_data *data, char *path);
 
 // entry
 void	add_entry(t_data *data, t_entry **entries, char *name, char *full_path);
 
 // print
 void	print_data(t_data *data);
+void	print_normal(t_entry *entry);
 void	print_list(t_entry *entry);
+void	print_total(t_entry *entries);
 
 // utils
 int		ft_strcmp(char *s1, char *s2);

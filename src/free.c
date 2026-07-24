@@ -27,7 +27,7 @@ static void	free_entries(t_entry *entry)
 	}
 }
 
-static void	free_dirs(t_dir *dirs)
+void	free_dirs(t_dir *dirs)
 {
 	t_dir	*dir;
 	t_dir	*tmp;

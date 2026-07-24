@@ -12,6 +12,20 @@
 
 #include "ft_ls.h"
 
+t_dir	*new_dir(char *path, struct stat *st)
+{
+	t_dir	*dir;
+
+	dir = malloc(sizeof(t_dir));
+	if (!dir)
+		return (NULL);
+	dir->path = path;
+	dir->stat = *st;
+	dir->entries = NULL;
+	dir->next = NULL;
+	return (dir);
+}
+
 static void	dir_insert_alpha(t_dir **a, t_dir *b, int r_flag)
 {
 	t_dir	*tmp;

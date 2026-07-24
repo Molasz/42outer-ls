@@ -12,6 +12,11 @@
 
 #include "ft_ls.h"
 
+void	print_normal(t_entry *entry)
+{
+	ft_printf("%s  ", entry->name);
+}
+
 static char	get_permission_type(mode_t mode)
 {
 	if (S_ISDIR(mode))
@@ -65,4 +70,19 @@ void	print_list(t_entry *entry)
 		ft_printf(" %s -> %s\n", entry->name, entry->symlink);
 	else
 		ft_printf(" %s\n", entry->name);
+}
+
+void	print_total(t_entry *entries)
+{
+	t_entry	*tmp;
+	long	total;
+
+	total = 0;
+	tmp = entries;
+	while (tmp)
+	{
+		total += tmp->stat.st_blocks;
+		tmp = tmp->next;
+	}
+	ft_printf("total %ld\n", total / 2);
 }

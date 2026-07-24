@@ -10,7 +10,7 @@ SRCS		= ft_ls.c \
 				dir_sort.c \
 				entry.c \
 				print.c \
-				print_list.c \
+				print_utils.c \
 				free.c \
 				utils.c
 

@@ -12,26 +12,6 @@
 
 #include "ft_ls.h"
 
-static void	print_total(t_entry *entries)
-{
-	t_entry	*tmp;
-	long	total;
-
-	total = 0;
-	tmp = entries;
-	while (tmp)
-	{
-		total += tmp->stat.st_blocks;
-		tmp = tmp->next;
-	}
-	ft_printf("total %ld\n", total / 2);
-}
-
-static void	print_normal(t_entry *entry)
-{
-	ft_printf("%s  ", entry->name);
-}
-
 static void	print_entries(t_data *data, t_entry *entries)
 {
 	t_entry	*entry;
@@ -51,6 +31,46 @@ static void	print_entries(t_data *data, t_entry *entries)
 		ft_printf("\n");
 }
 
+static void	print_dir_content(t_data *data, t_dir *dir, int print_header);
+
+static void	explore_subdirs(t_data *data, t_dir *dir)
+{
+	t_entry	*entry;
+	char	*subpath;
+	t_dir	*subdir;
+
+	entry = dir->entries;
+	while (entry)
+	{
+		if (S_ISDIR(entry->stat.st_mode) && ft_strcmp(entry->name, ".") != 0
+			&& ft_strcmp(entry->name, "..") != 0)
+		{
+			subpath = ft_concat_path(dir->path, entry->name);
+			if (!subpath)
+				free_exit(data, 1);
+			subdir = read_subdir(data, subpath);
+			if (subdir)
+			{
+				ft_printf("\n");
+				print_dir_content(data, subdir, 1);
+				free_dirs(subdir);
+			}
+		}
+		entry = entry->next;
+	}
+}
+
+static void	print_dir_content(t_data *data, t_dir *dir, int print_header)
+{
+	if (print_header)
+		ft_printf("%s:\n", dir->path);
+	if (data->l_flag && dir->entries)
+		print_total(dir->entries);
+	print_entries(data, dir->entries);
+	if (data->rec_flag)
+		explore_subdirs(data, dir);
+}
+
 static void	print_dirs(t_data *data)
 {
 	t_dir	*dir;
@@ -58,11 +78,9 @@ static void	print_dirs(t_data *data)
 	dir = data->dirs;
 	while (dir)
 	{
-		if (data->rec_flag || data->files || (data->dirs && data->dirs->next))
-			ft_printf("%s:\n", dir->path);
-		if (data->l_flag && dir->entries)
-			print_total(dir->entries);
-		print_entries(data, dir->entries);
+		print_dir_content(data, dir,
+			(data->rec_flag || data->files || (data->dirs && data->dirs->next))
+			);
 		dir = dir->next;
 		if (dir)
 			ft_printf("\n");

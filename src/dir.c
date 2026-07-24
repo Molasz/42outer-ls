@@ -12,39 +12,17 @@
 
 #include "ft_ls.h"
 
-static t_dir	*new_dir(char *path, struct stat *st)
-{
-	t_dir	*dir;
-
-	dir = malloc(sizeof(t_dir));
-	if (!dir)
-		return (NULL);
-	dir->path = path;
-	dir->stat = *st;
-	dir->entries = NULL;
-	dir->next = NULL;
-	return (dir);
-}
-
 static void	read_path(t_data *d, t_dir *dir, struct stat st, struct dirent *en)
 {
-	char			*full_path;
+	char	*full_path;
 
 	full_path = ft_concat_path(dir->path, en->d_name);
 	if (!full_path)
 		free_exit(d, 1);
 	if (lstat(full_path, &st) == -1)
-	{
 		print_errno("access", full_path);
-		free(full_path);
-	}
 	add_entry(d, &dir->entries, en->d_name, full_path);
-	if (d->rec_flag && S_ISDIR(st.st_mode)
-		&& ft_strcmp(en->d_name, ".") != 0
-		&& ft_strcmp(en->d_name, "..") != 0)
-		add_dir(d, full_path);
-	else
-		free(full_path);
+	free(full_path);
 }
 
 static int	read_dir_entry(t_data *data, t_dir *dir, DIR *dp)
@@ -84,6 +62,32 @@ static void	ft_opendir(t_data *data, t_dir *dir)
 		print_errno("close directory", dir->path);
 		free_exit(data, 1);
 	}
+}
+
+t_dir	*read_subdir(t_data *data, char *path)
+{
+	t_dir		*dir;
+	struct stat	st;
+
+	if (lstat(path, &st) == -1)
+	{
+		print_errno("access", path);
+		free(path);
+		return (NULL);
+	}
+	if (!S_ISDIR(st.st_mode))
+	{
+		free(path);
+		return (NULL);
+	}
+	dir = new_dir(path, &st);
+	if (!dir)
+	{
+		free(path);
+		free_exit(data, 1);
+	}
+	ft_opendir(data, dir);
+	return (dir);
 }
 
 void	add_dir(t_data *data, char *path)
