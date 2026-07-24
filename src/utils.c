@@ -50,3 +50,23 @@ char	*ft_ternary(int con, char *a, char *b)
 	else
 		return (b);
 }
+
+char	*symlink_target(char *path, struct stat *st)
+{
+	char	*target;
+	ssize_t	len;
+
+	if (!S_ISLNK(st->st_mode))
+		return (NULL);
+	target = malloc(st->st_size + 1);
+	if (!target)
+		return (NULL);
+	len = readlink(path, target, st->st_size + 1);
+	if (len == -1)
+	{
+		free(target);
+		return (NULL);
+	}
+	target[len] = '\0';
+	return (target);
+}

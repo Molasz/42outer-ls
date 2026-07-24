@@ -48,9 +48,17 @@ static void	dir_insert_alpha(t_dir **a, t_dir *b, int r_flag)
 static int	cmp_dir_time(t_dir *x, t_dir *y)
 {
 	if (x->stat.st_mtim.tv_sec != y->stat.st_mtim.tv_sec)
-		return (x->stat.st_mtim.tv_sec > y->stat.st_mtim.tv_sec ? -1 : 1);
+	{
+		if (x->stat.st_mtim.tv_sec > y->stat.st_mtim.tv_sec)
+			return (-1);
+		return (1);
+	}
 	if (x->stat.st_mtim.tv_nsec != y->stat.st_mtim.tv_nsec)
-		return (x->stat.st_mtim.tv_nsec > y->stat.st_mtim.tv_nsec ? -1 : 1);
+	{
+		if (x->stat.st_mtim.tv_nsec > y->stat.st_mtim.tv_nsec)
+			return (-1);
+		return (1);
+	}
 	return (ft_strcmp(x->path, y->path));
 }
 

@@ -36,19 +36,25 @@ static char	get_permission_type(mode_t mode)
 
 static void	print_permissions(mode_t mode)
 {
-	char	type;
-
-	type = get_permission_type(mode);
-	ft_printf("%c", type);
+	ft_printf("%c", get_permission_type(mode));
 	ft_printf("%s", ft_ternary(mode & S_IRUSR, "r", "-"));
 	ft_printf("%s", ft_ternary(mode & S_IWUSR, "w", "-"));
-	ft_printf("%s", ft_ternary(mode & S_IXUSR, "x", "-"));
+	if (mode & S_ISUID)
+		ft_printf("%s", ft_ternary(mode & S_IXUSR, "s", "S"));
+	else
+		ft_printf("%s", ft_ternary(mode & S_IXUSR, "x", "-"));
 	ft_printf("%s", ft_ternary(mode & S_IRGRP, "r", "-"));
 	ft_printf("%s", ft_ternary(mode & S_IWGRP, "w", "-"));
-	ft_printf("%s", ft_ternary(mode & S_IXGRP, "x", "-"));
+	if (mode & S_ISGID)
+		ft_printf("%s", ft_ternary(mode & S_IXGRP, "s", "S"));
+	else
+		ft_printf("%s", ft_ternary(mode & S_IXGRP, "x", "-"));
 	ft_printf("%s", ft_ternary(mode & S_IROTH, "r", "-"));
 	ft_printf("%s", ft_ternary(mode & S_IWOTH, "w", "-"));
-	ft_printf("%s", ft_ternary(mode & S_IXOTH, "x", "-"));
+	if (mode & S_ISVTX)
+		ft_printf("%s", ft_ternary(mode & S_IXOTH, "t", "T"));
+	else
+		ft_printf("%s", ft_ternary(mode & S_IXOTH, "x", "-"));
 }
 
 void	print_list(t_entry *entry)

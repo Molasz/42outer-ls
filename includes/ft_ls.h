@@ -77,5 +77,6 @@ void	print_total(t_entry *entries);
 int		ft_strcmp(char *s1, char *s2);
 char	*ft_concat_path(char *s1, char *s2);
 char	*ft_ternary(int con, char *a, char *b);
+char	*symlink_target(char *path, struct stat *st);
 
 #endif

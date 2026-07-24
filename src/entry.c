@@ -12,26 +12,6 @@
 
 #include "ft_ls.h"
 
-char	*symlink_target(char *path, struct stat *st)
-{
-	char	*target;
-	ssize_t	len;
-
-	if (!S_ISLNK(st->st_mode))
-		return (NULL);
-	target = malloc(st->st_size + 1);
-	if (!target)
-		return (NULL);
-	len = readlink(path, target, st->st_size + 1);
-	if (len == -1)
-	{
-		free(target);
-		return (NULL);
-	}
-	target[len] = '\0';
-	return (target);
-}
-
 static t_entry	*new_entry(char *name, char *full_path)
 {
 	t_entry		*entry;
@@ -75,9 +55,17 @@ static void	entry_insert_alpha(t_entry **a, t_entry *b, int r_flag)
 static int	cmp_entry_time(t_entry *x, t_entry *y)
 {
 	if (x->stat.st_mtim.tv_sec != y->stat.st_mtim.tv_sec)
-		return (x->stat.st_mtim.tv_sec > y->stat.st_mtim.tv_sec ? -1 : 1);
+	{
+		if (x->stat.st_mtim.tv_sec > y->stat.st_mtim.tv_sec)
+			return (-1);
+		return (1);
+	}
 	if (x->stat.st_mtim.tv_nsec != y->stat.st_mtim.tv_nsec)
-		return (x->stat.st_mtim.tv_nsec > y->stat.st_mtim.tv_nsec ? -1 : 1);
+	{
+		if (x->stat.st_mtim.tv_nsec > y->stat.st_mtim.tv_nsec)
+			return (-1);
+		return (1);
+	}
 	return (ft_strcmp(x->name, y->name));
 }
 
