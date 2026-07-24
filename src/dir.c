@@ -88,7 +88,11 @@ t_dir	*read_subdir(t_data *data, char *path)
 		free_exit(data, 1);
 	}
 	if (ft_opendir(data, dir))
+	{
+		free(path);
+		free(dir);
 		return (NULL);
+	}
 	return (dir);
 }
 
@@ -100,6 +104,7 @@ void	add_dir(t_data *data, char *path)
 	if (lstat(path, &st) == -1)
 	{
 		print_errno(data, "access", path);
+		free(path);
 		return ;
 	}
 	if (S_ISDIR(st.st_mode))

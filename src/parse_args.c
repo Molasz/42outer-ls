@@ -49,7 +49,7 @@ static int	read_flags(char **argv, t_data *data)
 	paths = 0;
 	while (argv[i])
 	{
-		if (argv[i][0] == '-')
+		if (argv[i][0] == '-' && argv[i][1])
 			read_flag(argv[i] + 1, data);
 		else
 			paths++;
@@ -66,7 +66,7 @@ static void	read_args(char **argv, t_data *data)
 	i = 0;
 	while (argv[i])
 	{
-		if (argv[i][0] != '-')
+		if (!(argv[i][0] == '-' && argv[i][1]))
 		{
 			str = ft_strdup(argv[i]);
 			if (!str)
