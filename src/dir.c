@@ -77,10 +77,7 @@ t_dir	*read_subdir(t_data *data, char *path)
 		return (NULL);
 	}
 	if (!S_ISDIR(st.st_mode))
-	{
-		free(path);
-		return (NULL);
-	}
+		return (free(path), NULL);
 	dir = new_dir(path, &st);
 	if (!dir)
 	{
