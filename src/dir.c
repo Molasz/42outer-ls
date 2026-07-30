@@ -12,9 +12,11 @@
 
 #include "ft_ls.h"
 
-static void	read_path(t_data *d, t_dir *dir, struct stat st, struct dirent *en)
+static void	read_path(t_data *d, t_dir *dir, struct dirent *en)
 {
 	char	*full_path;
+	struct stat		st;
+
 
 	full_path = ft_concat_path(dir->path, en->d_name);
 	if (!full_path)
@@ -27,7 +29,6 @@ static void	read_path(t_data *d, t_dir *dir, struct stat st, struct dirent *en)
 
 static int	read_dir_entry(t_data *data, t_dir *dir, DIR *dp)
 {
-	struct stat		st;
 	struct dirent	*ent;
 
 	errno = 0;
@@ -39,7 +40,7 @@ static int	read_dir_entry(t_data *data, t_dir *dir, DIR *dp)
 		return (1);
 	}
 	if (ent->d_name[0] != '.' || data->a_flag)
-		read_path(data, dir, st, ent);
+		read_path(data, dir, ent);
 	return (0);
 }
 
