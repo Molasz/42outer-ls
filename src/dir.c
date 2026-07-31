@@ -6,7 +6,7 @@
 /*   By: molasz-a <molasz.dev@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/29 00:39:57 by molasz-a          #+#    #+#             */
-/*   Updated: 2026/06/29 00:39:58 by molasz-a         ###   ########.fr       */
+/*   Updated: 2026/07/31 13:37:09 by molasz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,8 @@
 
 static void	read_path(t_data *d, t_dir *dir, struct dirent *en)
 {
-	char	*full_path;
-	struct stat		st;
-
+	char		*full_path;
+	struct stat	st;
 
 	full_path = ft_concat_path(dir->path, en->d_name);
 	if (!full_path)
